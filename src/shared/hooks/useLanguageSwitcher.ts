@@ -1,11 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { app } from '@shared/configs';
 
 const useLanguageSwitcher = () => {
   const router = useRouter();
 
-  const changeLanguage = (lang: 'en' | 'ru') => {
+  const changeLanguage = (lang: (typeof app.locale)[number]) => {
     const date = new Date();
 
     date.setFullYear(9999);
