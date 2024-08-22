@@ -1,0 +1,40 @@
+name: 🧪 CI
+on:
+  pull_request:
+
+jobs:
+  ci:
+    name: 🧪 CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 💩 Enable Corepack before setting up Node
+        run: corepack enable
+
+      - name: 🔨 install node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'package.json'
+          cache: 'npm'
+
+      - name: 🔨 install package
+        run: npm install
+
+      - name: 👍 Typescript checks
+        run: npx tsc
+
+      - name: 🔍 ES lint
+        run: npm run lint
+
+      - name: 🔍 Stylelint
+        run: npm run stylelint
+
+      - name: 🧪 Tests
+        run: npm run test:staged
+
+      - name: 🧪 Tests coverage
+        run: npm run coverage
