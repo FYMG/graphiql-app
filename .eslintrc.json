@@ -1,0 +1,48 @@
+{
+  "noInlineConfig": true,
+  "extends": [
+    "plugin:sonarjs/recommended-legacy",
+    "plugin:typescript-sort-keys/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "next/core-web-vitals",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "react/jsx-props-no-spreading": 0,
+    "import/prefer-default-export": 0,
+    "padding-line-between-statements": [
+      "error",
+      { "blankLine": "always", "prev": "*", "next": "return" },
+      {
+        "blankLine": "always",
+        "prev": ["const", "let", "var"],
+        "next": "*"
+      },
+      {
+        "blankLine": "any",
+        "prev": ["const", "let", "var"],
+        "next": ["const", "let", "var"]
+      },
+      {
+        "blankLine": "any",
+        "prev": "directive",
+        "next": "directive"
+      },
+      {
+        "blankLine": "always",
+        "prev": ["block", "if", "for", "while"],
+        "next": "*"
+      },
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": ["if", "for", "while", "block"]
+      }
+    ]
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}
