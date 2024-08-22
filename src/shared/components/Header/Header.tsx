@@ -8,11 +8,15 @@ function Header() {
   const { changeLanguage } = useLanguageSwitcher();
 
   return (
-    <header className={'dark flex justify-between'}>
+    <header className="dark flex justify-between">
       <Link href={routes.main}>Header</Link>
       <div>
-        <button onClick={() => changeLanguage('en')}>English</button>
-        <button onClick={() => changeLanguage('ru')}>Русский</button>
+        <button type="button" onClick={() => changeLanguage('en')}>
+          English
+        </button>
+        <button type="button" onClick={() => changeLanguage('ru')}>
+          Русский
+        </button>
       </div>
       <div>
         <Link href={routes.login}>Login</Link>

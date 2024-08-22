@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HistoryItem } from '@/history/models';
+import { HistoryItem } from '@history/models';
 
 const useRequestHistory = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);

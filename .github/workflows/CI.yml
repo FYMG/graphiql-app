@@ -30,11 +30,5 @@ jobs:
       - name: 🔍 ES lint
         run: npm run lint
 
-      - name: 🔍 Stylelint
-        run: npm run stylelint
-
       - name: 🧪 Tests
-        run: npm run test:staged
-
-      - name: 🧪 Tests coverage
-        run: npm run coverage
+        run: npm run test

@@ -1,8 +1,8 @@
 interface HistoryItem {
   baseUrl: string;
   method: string;
-  url: string;
   sendTime: number;
+  url: string;
 }
 
 export default HistoryItem;

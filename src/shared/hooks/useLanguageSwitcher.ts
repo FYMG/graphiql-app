@@ -1,4 +1,5 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 
 const useLanguageSwitcher = () => {
@@ -6,10 +7,10 @@ const useLanguageSwitcher = () => {
 
   const changeLanguage = (lang: 'en' | 'ru') => {
     const date = new Date();
+
     date.setFullYear(9999);
 
-    document.cookie =
-      'NEXT_LOCALE' + '=' + lang + '; expires=' + date.toUTCString() + '; path=/';
+    document.cookie = `NEXT_LOCALE=${lang}; expires=${date.toUTCString()}; path=/`;
     router.refresh();
   };
 

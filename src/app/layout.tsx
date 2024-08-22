@@ -8,7 +8,6 @@ import { Footer } from '@shared/components/Footer';
 import { Inter as FontSans } from 'next/font/google';
 import { cn } from '@lib/utils';
 import { ThemeProvider } from '@shared/components/ThemeProvider';
-import { useTransition } from 'react';
 
 const fontSans = FontSans({
   subsets: ['latin'],

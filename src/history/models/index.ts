@@ -1,1 +1,1 @@
-export { default as HistoryItem } from './HistoryItem';
+export type { default as HistoryItem } from './HistoryItem';
