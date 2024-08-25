@@ -15,9 +15,18 @@ function RestView() {
   const [url, setUrl] = useState<string>('');
   const [response, setResponse] = useState<Record<string, unknown> | null>(null);
   const [status, setStatus] = useState<number | null>(null);
+  const [urlError, setUrlError] = useState<string | null>(null);
 
   const sendRequest = async () => {
     setResponse({});
+    setUrlError(null);
+
+    if (!url.trim()) {
+      setUrlError('Please enter a valid URL.');
+
+      return;
+    }
+
     try {
       const config = {
         method,
@@ -50,8 +59,8 @@ function RestView() {
         <MethodSelector method={method} setMethod={setMethod} />
         <input
           type="text"
-          placeholder="Your request"
-          className="focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none"
+          placeholder={urlError ? 'Please enter a valid URL' : 'Your request'}
+          className={`focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none ${urlError ? 'border border-red-500' : ''}`}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
