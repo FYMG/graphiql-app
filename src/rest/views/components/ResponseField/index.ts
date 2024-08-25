@@ -1,1 +1,1 @@
-export { default as BodyEditor } from './ResponseField';
+export { default as ResponseField } from './ResponseField';

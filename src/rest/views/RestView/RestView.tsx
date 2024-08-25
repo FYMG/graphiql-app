@@ -17,6 +17,7 @@ function RestView() {
   const [status, setStatus] = useState<number | null>(null);
 
   const sendRequest = async () => {
+    setResponse({});
     try {
       const config = {
         method,

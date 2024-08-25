@@ -12,17 +12,21 @@ function ResponseField({ status, response }: ResponseFieldProps) {
   return (
     <div className="mb-4">
       <h3 className="mb-2 font-semibold">Response</h3>
-      <p className={textColorClass}>Status: {status}</p>
-      <Editor
-        className="border px-1"
-        language="json"
-        theme="vs-light"
-        value={JSON.stringify(response, null, 2)}
-        options={{ readOnly: true, automaticLayout: true }}
-        height="100px"
-        width="100%"
-        data-testid="response-editor"
-      />
+      {status && (
+        <>
+          <p className={textColorClass}>Status: {status}</p>
+          <Editor
+            className="border px-1"
+            language="json"
+            theme="vs-light"
+            value={JSON.stringify(response, null, 2)}
+            options={{ readOnly: true, automaticLayout: true }}
+            height="100px"
+            width="100%"
+            data-testid="response-editor"
+          />
+        </>
+      )}
     </div>
   );
 }
