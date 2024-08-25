@@ -1,6 +1,8 @@
 import React from 'react';
 import Editor from '@monaco-editor/react';
 
+import { EmptyResponseField } from '../EmptyResponseField';
+
 interface ResponseFieldProps {
   response: Record<string, unknown> | null;
   status: number | null;
@@ -12,7 +14,7 @@ function ResponseField({ status, response }: ResponseFieldProps) {
   return (
     <div className="mb-4">
       <h3 className="mb-2 font-semibold">Response</h3>
-      {status && (
+      {status ? (
         <>
           <p className={textColorClass}>Status: {status}</p>
           <Editor
@@ -21,11 +23,13 @@ function ResponseField({ status, response }: ResponseFieldProps) {
             theme="vs-light"
             value={JSON.stringify(response, null, 2)}
             options={{ readOnly: true, automaticLayout: true }}
-            height="100px"
+            height="150px"
             width="100%"
             data-testid="response-editor"
           />
         </>
+      ) : (
+        <EmptyResponseField />
       )}
     </div>
   );

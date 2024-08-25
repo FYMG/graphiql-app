@@ -22,7 +22,7 @@ describe('ResponseField', () => {
   it('renders with null response and status', () => {
     render(<ResponseField response={null} status={null} />);
 
-    expect(screen.getByText(/Response/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.queryByText(/Status/i)).not.toBeInTheDocument();
     expect(screen.queryByTestId(testId)).not.toBeInTheDocument();
   });
@@ -33,7 +33,7 @@ describe('ResponseField', () => {
 
     render(<ResponseField response={response} status={status} />);
 
-    expect(screen.getByText(/Response/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.getByText(/Status: 200/i)).toBeInTheDocument();
     expect(screen.getByTestId(testId)).toHaveValue(JSON.stringify(response, null, 2));
   });
@@ -44,7 +44,7 @@ describe('ResponseField', () => {
 
     render(<ResponseField response={response} status={status} />);
 
-    expect(screen.getByText(/Response/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.getByText(/Status: 404/i)).toBeInTheDocument();
     expect(screen.getByText(/Status: 404/i)).toHaveClass('text-orange-500');
     expect(screen.getByTestId(testId)).toHaveValue(JSON.stringify(response, null, 2));
