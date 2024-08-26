@@ -25,7 +25,7 @@ describe('HeaderEditor', () => {
     setHeaders.mockClear();
   });
 
-  test('renders headers correctly', () => {
+  it('renders headers correctly', () => {
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
     const inputs = screen.getAllByPlaceholderText(/header/i);
@@ -37,7 +37,7 @@ describe('HeaderEditor', () => {
     expect(inputs[3]).toHaveValue(bearerToken);
   });
 
-  test('adds a new header', () => {
+  it('adds a new header', () => {
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
     const addButton = screen.getByText('Add Header');
@@ -51,7 +51,7 @@ describe('HeaderEditor', () => {
     ]);
   });
 
-  test('updates a header key', () => {
+  it('updates a header key', () => {
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
     const keyInput = screen.getAllByPlaceholderText('Header Key')[0];
@@ -64,7 +64,7 @@ describe('HeaderEditor', () => {
     ]);
   });
 
-  test('updates a header value', () => {
+  it('updates a header value', () => {
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
     const valueInput = screen.getAllByPlaceholderText('Header Value')[0];
@@ -77,7 +77,7 @@ describe('HeaderEditor', () => {
     ]);
   });
 
-  test('removes a header', () => {
+  it('removes a header', () => {
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
     const removeButton = screen.getAllByText('Remove')[0];

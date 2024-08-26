@@ -12,7 +12,7 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
 
   const updateHeader = (index: number, key: string, value: string) => {
     const newHeaders = headers.map((header, i) =>
-      i === index ? { key, value } : header
+      i === index ? { ...header, key, value } : header
     );
 
     setHeaders(newHeaders);
@@ -27,7 +27,7 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
       <h3 className="mb-2 font-semibold">Headers</h3>
       {headers.map((header, index) => (
         <div
-          key={header.value}
+          key={Date.now()}
           className="flex justify-between rounded-md border border-gray-300"
         >
           <input

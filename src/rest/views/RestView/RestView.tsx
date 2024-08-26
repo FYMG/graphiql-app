@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 
+import applyVariables from '@rest/utils/applyVariables';
+
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
 import { BodyEditor } from '../components/BodyEditor';
 import ResponseField from '../components/ResponseField/ResponseField';
+import { VariablesEditor } from '../components/VariablesEditor';
 
 function RestView() {
   const [method, setMethod] = useState('GET');
@@ -16,6 +19,7 @@ function RestView() {
   const [response, setResponse] = useState<Record<string, unknown> | null>(null);
   const [status, setStatus] = useState<number | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
+  const [variables, setVariables] = useState<{ key: string; value: string }[]>([]);
 
   const sendRequest = async () => {
     setResponse({});
@@ -28,10 +32,16 @@ function RestView() {
     }
 
     try {
+      const processedUrl = applyVariables(url, variables);
+      const processedHeaders = headers.map((header) => ({
+        key: header.key,
+        value: applyVariables(header.value, variables),
+      }));
+      const processedBody = applyVariables(body, variables);
       const config = {
         method,
-        url,
-        headers: headers.reduce(
+        url: processedUrl,
+        headers: processedHeaders.reduce(
           (acc, header) => {
             if (header.key && header.value) {
               acc[header.key] = header.value;
@@ -41,7 +51,7 @@ function RestView() {
           },
           {} as Record<string, string>
         ),
-        data: body,
+        data: processedBody,
       };
       const res: AxiosResponse = await axios(config);
 
@@ -73,6 +83,7 @@ function RestView() {
           Send
         </button>
       </div>
+      <VariablesEditor variables={variables} setVariables={setVariables} />
       <HeaderEditor headers={headers} setHeaders={setHeaders} />
       <BodyEditor body={body} setBody={setBody} />
       <ResponseField status={status} response={response} />
