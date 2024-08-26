@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Editor from '@monaco-editor/react';
 
 interface BodyEditorProps {
@@ -7,9 +7,19 @@ interface BodyEditorProps {
 }
 
 function BodyEditor({ body, setBody }: BodyEditorProps) {
+  const [format, setFormat] = useState<'json' | 'plaintext'>('json');
+
+  const onFormatChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormat(e.target.value as 'json' | 'plaintext');
+  };
+
   return (
     <div className="mb-4">
       <h3 className="mb-2 font-semibold">Body</h3>
+      <select value={format} onChange={onFormatChange}>
+        <option value="json">JSON</option>
+        <option value="plaintext">Plain Text</option>
+      </select>
       <Editor
         className="border px-1"
         language="json"

@@ -9,19 +9,24 @@ interface ResponseFieldProps {
 }
 
 function ResponseField({ status, response }: ResponseFieldProps) {
-  const textColorClass = status === 200 ? 'text-green-500' : 'text-orange-500';
+  const textColorClass =
+    status && status >= 200 && status < 300 ? 'text-green-500' : 'text-orange-500';
 
   return (
     <div className="mb-4">
       <h3 className="mb-2 font-semibold">Response</h3>
       {status ? (
         <>
-          <p className={textColorClass}>Status: {status}</p>
+          <p>
+            Status: <span className={textColorClass}>{status}</span>
+          </p>
           <Editor
             className="border px-1"
             language="json"
             theme="vs-light"
-            value={JSON.stringify(response, null, 2)}
+            value={
+              typeof response === 'string' ? response : JSON.stringify(response, null, 2)
+            }
             options={{ readOnly: true, automaticLayout: true }}
             height="150px"
             width="100%"

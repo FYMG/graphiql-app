@@ -22,7 +22,7 @@ function RestView() {
     setUrlError(null);
 
     if (!url.trim()) {
-      setUrlError('Please enter a valid URL.');
+      setUrlError('Please enter a valid URL');
 
       return;
     }
@@ -63,6 +63,7 @@ function RestView() {
           className={`focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none ${urlError ? 'border border-red-500' : ''}`}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
+          onKeyDown={sendRequest}
         />
         <button
           type="button"
