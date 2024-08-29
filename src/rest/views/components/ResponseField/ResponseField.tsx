@@ -4,13 +4,26 @@ import Editor from '@monaco-editor/react';
 import { EmptyResponseField } from '../EmptyResponseField';
 
 interface ResponseFieldProps {
+  loading: boolean;
   response: Record<string, unknown> | null;
   status: number | null;
 }
 
-function ResponseField({ status, response }: ResponseFieldProps) {
+function ResponseField({ status, response, loading }: ResponseFieldProps) {
   const textColorClass =
     status && status >= 200 && status < 300 ? 'text-green-500' : 'text-orange-500';
+
+  const getEditorValue = () => {
+    if (loading) {
+      return 'Loading...';
+    }
+
+    if (typeof response === 'string') {
+      return response;
+    }
+
+    return JSON.stringify(response, null, 2);
+  };
 
   return (
     <div className="mb-4">
@@ -24,9 +37,7 @@ function ResponseField({ status, response }: ResponseFieldProps) {
             className="border px-1"
             language="json"
             theme="vs-light"
-            value={
-              typeof response === 'string' ? response : JSON.stringify(response, null, 2)
-            }
+            value={getEditorValue()}
             options={{ readOnly: true, automaticLayout: true }}
             height="150px"
             width="100%"

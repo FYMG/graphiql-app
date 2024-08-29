@@ -20,6 +20,15 @@ function RestView() {
   const [status, setStatus] = useState<number | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
   const [variables, setVariables] = useState<{ key: string; value: string }[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleMethodChange = (newMethod: string) => {
+    setMethod(newMethod);
+  };
+
+  const handleUrlChange = (newUrl: string) => {
+    setUrl(newUrl);
+  };
 
   const sendRequest = async () => {
     setResponse({});
@@ -32,6 +41,7 @@ function RestView() {
     }
 
     try {
+      setLoading(true);
       const processedUrl = applyVariables(url, variables);
       const processedHeaders = headers.map((header) => ({
         key: header.key,
@@ -65,6 +75,8 @@ function RestView() {
         setStatus(500);
         setResponse({ message: 'Unknown error' });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,13 +89,13 @@ function RestView() {
   return (
     <div className="mx-auto my-4 max-w-[700px] bg-background shadow-md">
       <div className="mb-4 flex h-12 flex-wrap items-center border bg-background py-2 ps-2">
-        <MethodSelector method={method} setMethod={setMethod} />
+        <MethodSelector method={method} setMethod={handleMethodChange} />
         <input
           type="text"
           placeholder={urlError ? 'Please enter a valid URL' : 'Your request'}
           className={`focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none ${urlError ? 'border border-red-500' : ''}`}
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => handleUrlChange(e.target.value)}
           onKeyDown={onKeyPress}
         />
         <button
@@ -97,7 +109,7 @@ function RestView() {
       <VariablesEditor variables={variables} setVariables={setVariables} />
       <HeaderEditor headers={headers} setHeaders={setHeaders} />
       <BodyEditor body={body} setBody={setBody} />
-      <ResponseField status={status} response={response} />
+      <ResponseField status={status} response={response} loading={loading} />
     </div>
   );
 }
