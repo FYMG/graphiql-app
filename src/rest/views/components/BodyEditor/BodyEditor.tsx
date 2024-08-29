@@ -16,7 +16,11 @@ function BodyEditor({ body, setBody }: BodyEditorProps) {
   return (
     <div className="mb-4">
       <h3 className="mb-2 font-semibold">Body</h3>
-      <select value={format} onChange={onFormatChange}>
+      <select
+        value={format}
+        onChange={onFormatChange}
+        className="border-r focus:outline-none"
+      >
         <option value="json">JSON</option>
         <option value="plaintext">Plain Text</option>
       </select>

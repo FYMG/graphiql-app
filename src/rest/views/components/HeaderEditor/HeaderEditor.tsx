@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 interface HeaderEditorProps {
   headers: { key: string; value: string }[];
@@ -6,6 +6,7 @@ interface HeaderEditorProps {
 }
 
 function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
+  const headerBlockId = useId();
   const addHeader = () => {
     setHeaders([...headers, { key: '', value: '' }]);
   };
@@ -27,8 +28,8 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
       <h3 className="mb-2 font-semibold">Headers</h3>
       {headers.map((header, index) => (
         <div
-          key={Date.now()}
-          className="flex justify-between rounded-md border border-gray-300"
+          key={headerBlockId}
+          className="flex justify-between rounded-md border border-gray-300 py-2"
         >
           <input
             type="text"
@@ -42,7 +43,7 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
             placeholder="Header Value"
             value={header.value}
             onChange={(e) => updateHeader(index, header.key, e.target.value)}
-            className="px-2 focus:outline-none"
+            className="w-full px-2 focus:outline-none"
           />
           <button
             type="button"
@@ -53,7 +54,11 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
           </button>
         </div>
       ))}
-      <button type="button" onClick={addHeader} className="mb-2 text-sm text-blue-500">
+      <button
+        type="button"
+        onClick={addHeader}
+        className="mb-2 text-sm text-blue-500 transition delay-150 hover:text-blue-900"
+      >
         Add Header
       </button>
     </div>

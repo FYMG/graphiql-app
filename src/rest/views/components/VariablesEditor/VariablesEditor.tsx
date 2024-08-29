@@ -34,7 +34,7 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
       {variables.map((variable, index) => (
         <div
           key={blockId}
-          className="flex justify-between rounded-md border border-gray-300"
+          className="flex justify-between rounded-md border border-gray-300 py-2"
         >
           <input
             type="text"
@@ -48,7 +48,7 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
             placeholder="Variable Value"
             value={variable.value}
             onChange={(e) => updateVariable(index, variable.key, e.target.value)}
-            className="px-2 focus:outline-none"
+            className="w-full px-2 focus:outline-none"
           />
           <button
             type="button"
@@ -59,7 +59,11 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
           </button>
         </div>
       ))}
-      <button type="button" onClick={addVariable} className="mb-2 text-sm text-blue-500">
+      <button
+        type="button"
+        onClick={addVariable}
+        className="mb-2 text-sm text-blue-500 transition delay-150 hover:text-blue-900"
+      >
         Add Variables
       </button>
     </div>

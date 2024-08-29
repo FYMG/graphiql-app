@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
-import applyVariables from '@rest/utils/applyVariables';
+import applyVariables from '@rest/utils/applyVariablesUtil';
 
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
@@ -57,9 +57,20 @@ function RestView() {
 
       setStatus(res.status);
       setResponse(res.data);
-    } catch (error: any) {
-      setStatus(error.response?.status || 500);
-      setResponse(error.response?.data || 'Error');
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setStatus(error.response?.status || 500);
+        setResponse(error.response?.data || 'Error');
+      } else {
+        setStatus(500);
+        setResponse({ message: 'Unknown error' });
+      }
+    }
+  };
+
+  const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      sendRequest();
     }
   };
 
@@ -73,7 +84,7 @@ function RestView() {
           className={`focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none ${urlError ? 'border border-red-500' : ''}`}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          onKeyDown={sendRequest}
+          onKeyDown={onKeyPress}
         />
         <button
           type="button"
