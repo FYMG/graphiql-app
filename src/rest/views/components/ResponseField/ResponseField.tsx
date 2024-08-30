@@ -15,7 +15,7 @@ function ResponseField({ status, response, loading }: ResponseFieldProps) {
 
   const getEditorValue = () => {
     if (loading) {
-      return 'Loading...';
+      return 'Loading response...';
     }
 
     if (typeof response === 'string') {

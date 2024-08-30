@@ -22,14 +22,6 @@ function RestView() {
   const [variables, setVariables] = useState<{ key: string; value: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleMethodChange = (newMethod: string) => {
-    setMethod(newMethod);
-  };
-
-  const handleUrlChange = (newUrl: string) => {
-    setUrl(newUrl);
-  };
-
   const sendRequest = async () => {
     setResponse({});
     setUrlError(null);
@@ -40,6 +32,19 @@ function RestView() {
       return;
     }
 
+    const encodedUrl = btoa(url);
+    const encodedBody = body ? btoa(JSON.stringify(body)) : '';
+    const queryParams = headers
+      .filter((header) => header.key && header.value)
+      .map(
+        (header) =>
+          `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`
+      )
+      .join('&');
+
+    const fullUrl = `/${method}/${encodedUrl}/${encodedBody}?${queryParams}`;
+
+    window.history.replaceState(null, '', fullUrl);
     try {
       setLoading(true);
       const processedUrl = applyVariables(url, variables);
@@ -63,6 +68,7 @@ function RestView() {
         ),
         data: processedBody,
       };
+
       const res: AxiosResponse = await axios(config);
 
       setStatus(res.status);
@@ -89,13 +95,13 @@ function RestView() {
   return (
     <div className="mx-auto my-4 max-w-[700px] bg-background shadow-md">
       <div className="mb-4 flex h-12 flex-wrap items-center border bg-background py-2 ps-2">
-        <MethodSelector method={method} setMethod={handleMethodChange} />
+        <MethodSelector method={method} setMethod={setMethod} />
         <input
           type="text"
           placeholder={urlError ? 'Please enter a valid URL' : 'Your request'}
           className={`focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none ${urlError ? 'border border-red-500' : ''}`}
           value={url}
-          onChange={(e) => handleUrlChange(e.target.value)}
+          onChange={(e) => setUrl(e.target.value)}
           onKeyDown={onKeyPress}
         />
         <button

@@ -7,12 +7,20 @@ import ResponseField from './ResponseField';
 jest.mock('@monaco-editor/react', () => {
   return function MonacoEditorMock({
     'data-testid': testId,
+    loading,
     value,
   }: {
     'data-testid': string;
+    loading: boolean;
     value: string;
   }) {
-    return <textarea data-testid={testId} value={value} readOnly />;
+    return (
+      <textarea
+        data-testid={testId}
+        value={loading ? 'Loading response...' : value}
+        readOnly
+      />
+    );
   };
 });
 
@@ -20,7 +28,7 @@ const testId = 'response-editor';
 
 describe('ResponseField', () => {
   it('renders with null response and status', () => {
-    render(<ResponseField response={null} status={null} />);
+    render(<ResponseField response={null} status={null} loading={false} />);
 
     expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.queryByText(/Status/i)).not.toBeInTheDocument();
@@ -31,7 +39,7 @@ describe('ResponseField', () => {
     const response = { message: 'Success' };
     const status = 200;
 
-    render(<ResponseField response={response} status={status} />);
+    render(<ResponseField response={response} status={status} loading={false} />);
 
     expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.getByText(/Status:/i)).toBeInTheDocument();
@@ -43,7 +51,7 @@ describe('ResponseField', () => {
     const response = { message: 'Error' };
     const status = 404;
 
-    render(<ResponseField response={response} status={status} />);
+    render(<ResponseField response={response} status={status} loading={false} />);
 
     expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.getByText(/Status:/i)).toBeInTheDocument();
