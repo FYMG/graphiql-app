@@ -6,11 +6,13 @@ interface BodyEditorProps {
   setBody: (body: string) => void;
 }
 
+type BodyFormat = 'json' | 'plainttext';
+
 function BodyEditor({ body, setBody }: BodyEditorProps) {
-  const [format, setFormat] = useState<'json' | 'plaintext'>('json');
+  const [format, setFormat] = useState<BodyFormat>('json');
 
   const onFormatChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormat(e.target.value as 'json' | 'plaintext');
+    setFormat(e.target.value as BodyFormat);
   };
 
   return (
