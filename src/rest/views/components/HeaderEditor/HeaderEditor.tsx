@@ -1,5 +1,8 @@
 import React, { useId } from 'react';
 
+import { Input } from '@shared/components/ui/input';
+import { Button } from '@shared/components/ui/button';
+
 interface HeaderEditorProps {
   headers: { key: string; value: string }[];
   setHeaders: (headers: { key: string; value: string }[]) => void;
@@ -24,43 +27,38 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
   };
 
   return (
-    <div>
-      <h3 className="mb-2 font-semibold">Headers</h3>
+    <div className="mb-2">
+      <h3 className="font-semibold">Headers</h3>
       {headers.map((header, index) => (
         <div
           key={headerBlockId}
-          className="flex justify-between rounded-md border border-gray-300 py-2"
+          className="flex justify-between gap-2 rounded-md border border-gray-300 px-1 py-1"
         >
-          <input
+          <Input
             type="text"
             placeholder="Header Key"
             value={header.key}
             onChange={(e) => updateHeader(index, e.target.value, header.value)}
-            className="border-r border-gray-300 px-2 focus:outline-none"
           />
-          <input
+          <Input
             type="text"
             placeholder="Header Value"
             value={header.value}
             onChange={(e) => updateHeader(index, header.key, e.target.value)}
-            className="w-full px-2 focus:outline-none"
           />
-          <button
-            type="button"
-            onClick={() => removeHeader(index)}
-            className="linear h-full rounded-sm bg-accent px-3 text-accent-foreground transition delay-150 hover:bg-foreground hover:text-accent"
-          >
+          <Button variant="default" onClick={() => removeHeader(index)}>
             Remove
-          </button>
+          </Button>
         </div>
       ))}
-      <button
-        type="button"
+
+      <Button
+        variant="link"
         onClick={addHeader}
-        className="mb-2 text-sm text-blue-500 transition delay-150 hover:text-blue-900"
+        className="m-0 h-auto p-0 text-sm text-blue-400 transition delay-150 hover:text-blue-700 hover:no-underline"
       >
         Add Header
-      </button>
+      </Button>
     </div>
   );
 }

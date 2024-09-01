@@ -1,5 +1,8 @@
 import React, { useId } from 'react';
 
+import { Input } from '@shared/components/ui/input';
+import { Button } from '@shared/components/ui/button';
+
 interface Variable {
   key: string;
   value: string;
@@ -29,43 +32,37 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
   };
 
   return (
-    <div>
-      <h3 className="mb-2 font-semibold">Variables</h3>
+    <div className="mb-2">
+      <h3 className="font-semibold">Variables</h3>
       {variables.map((variable, index) => (
         <div
           key={blockId}
-          className="flex justify-between rounded-md border border-gray-300 py-2"
+          className="flex justify-between gap-2 rounded-md border border-gray-300 px-1 py-1"
         >
-          <input
+          <Input
             type="text"
             placeholder="Variable Key"
             value={variable.key}
             onChange={(e) => updateVariable(index, e.target.value, variable.value)}
-            className="border-r border-gray-300 px-2 focus:outline-none"
           />
-          <input
+          <Input
             type="text"
             placeholder="Variable Value"
             value={variable.value}
             onChange={(e) => updateVariable(index, variable.key, e.target.value)}
-            className="w-full px-2 focus:outline-none"
           />
-          <button
-            type="button"
-            onClick={() => removeVariable(index)}
-            className="linear h-full rounded-sm bg-accent px-3 text-accent-foreground transition delay-150 hover:bg-foreground hover:text-accent"
-          >
+          <Button variant="default" onClick={() => removeVariable(index)}>
             Remove
-          </button>
+          </Button>
         </div>
       ))}
-      <button
-        type="button"
+      <Button
+        variant="link"
         onClick={addVariable}
-        className="mb-2 text-sm text-blue-500 transition delay-150 hover:text-blue-900"
+        className="m-0 h-auto p-0 text-sm text-blue-400 transition delay-150 hover:text-blue-700 hover:no-underline"
       >
         Add Variables
-      </button>
+      </Button>
     </div>
   );
 }

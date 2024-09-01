@@ -5,6 +5,8 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import applyVariables from '@rest/utils/applyVariablesUtil';
 
+import { Button } from '@shared/components/ui/button';
+import { Input } from '@shared/components/ui/input';
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
 import { BodyEditor } from '../components/BodyEditor';
@@ -94,23 +96,19 @@ function RestView() {
 
   return (
     <div className="mx-auto my-4 max-w-[700px] bg-background shadow-md">
-      <div className="mb-4 flex h-12 flex-wrap items-center border bg-background py-2 ps-2">
+      <div className="mb-4 flex h-12 flex-wrap items-center gap-2 border bg-background px-1">
         <MethodSelector method={method} setMethod={setMethod} />
-        <input
+        <Input
           type="text"
           placeholder={urlError ? 'Please enter a valid URL' : 'Your request'}
-          className={`focus:shadow-outline h-full grow appearance-none rounded px-3 leading-tight text-gray-700 focus:outline-none ${urlError ? 'border border-red-500' : ''}`}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           onKeyDown={onKeyPress}
+          className={`w-auto grow ${urlError ? 'border border-red-500' : ''}`}
         />
-        <button
-          type="button"
-          className="linear h-full rounded-sm bg-accent px-3 text-accent-foreground transition delay-150 hover:bg-foreground hover:text-accent"
-          onClick={sendRequest}
-        >
+        <Button variant={url.length ? 'default' : 'secondary'} onClick={sendRequest}>
           Send
-        </button>
+        </Button>
       </div>
       <VariablesEditor variables={variables} setVariables={setVariables} />
       <HeaderEditor headers={headers} setHeaders={setHeaders} />

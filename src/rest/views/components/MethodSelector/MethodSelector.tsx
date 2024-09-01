@@ -1,5 +1,13 @@
 import React from 'react';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@shared/components/ui/select';
+
 interface MethodSelectorProps {
   method: string;
   setMethod: (method: string) => void;
@@ -8,22 +16,19 @@ interface MethodSelectorProps {
 const methods = ['GET', 'POST', 'PUT', 'DELETE'];
 
 function MethodSelector({ method, setMethod }: MethodSelectorProps) {
-  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    setMethod(e.target.value);
-  }
-
   return (
-    <select
-      value={method}
-      onChange={handleChange}
-      className="border-r focus:outline-none"
-    >
-      {methods.map((methodItem) => (
-        <option key={methodItem} value={methodItem}>
-          {methodItem}
-        </option>
-      ))}
-    </select>
+    <Select value={method} onValueChange={setMethod}>
+      <SelectTrigger className="w-auto gap-2">
+        <SelectValue>{method}</SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        {methods.map((methodItem) => (
+          <SelectItem key={methodItem} value={methodItem}>
+            {methodItem}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 
