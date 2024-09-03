@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { routes } from '@shared/configs';
 import { useAuth } from '@auth/providers/AuthProvider';
 import LocaleDropDown from 'src/shared/components/LocaleSelect';
+import { ThemeToggle } from '@shared/components/ThemeToggle';
 
 function Header() {
   const { logout, isAuth } = useAuth();
@@ -12,6 +13,7 @@ function Header() {
     <header className="dark flex justify-between">
       <Link href={routes.main}>Header</Link>
       <div>
+        <ThemeToggle />
         <LocaleDropDown />
       </div>
       <div>
