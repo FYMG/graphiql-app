@@ -1,18 +1,13 @@
 import { getRequestConfig } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import { app } from '@shared/configs';
-
-function isLocale(value: string | undefined) {
-  if (value === undefined) return false;
-
-  return app.locale.includes(value as (typeof app.locale)[number]);
-}
+import isLocale from '@shared/helpers/isLocale';
 
 export default getRequestConfig(async () => {
   const cookiesLocale = cookies().get('NEXT_LOCALE')?.value;
-  const locale = isLocale(cookiesLocale)
+  const locale: (typeof app.locale)[number] = isLocale(cookiesLocale)
     ? (cookiesLocale as (typeof app.locale)[number])
-    : app.locale[1];
+    : app.defaultLocale;
 
   return {
     locale,

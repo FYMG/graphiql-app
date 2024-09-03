@@ -1,1 +1,25 @@
-{}
+{
+  "shared": {
+    "en": "\uD83C\uDDEC\uD83C\uDDE7 English",
+    "ru": "\uD83C\uDDF7\uD83C\uDDFA Русский",
+    "select-language": "Выберите язык"
+  },
+  "auth": {
+    "email-already-in-use": "Пользователь с таким email уже существует",
+    "password-too-short": "Пароль должен содержать не менее 6 символов",
+    "invalid-email": "Неверный email",
+    "register": "Зарегистрироваться",
+    "email": "Email",
+    "password": "Пароль",
+    "register-failed": "Регистрация не удалась",
+    "login-failed": "Вход не удался",
+    "login": "Войти",
+    "repeat-password": "Повторите пароль",
+    "passwords-dont-match": "Пароли не совпадают",
+    "required": "Поле обязательно для заполнения",
+    "invalid-credentials": "Неверные учетные данные",
+    "too-many-requests": "Слишком много запросов. Пожалуйста, попробуйте позже.",
+    "password-required": "Для входа необходим пароль",
+    "user-disabled": "Пользователь отключен"
+  }
+}

@@ -6,8 +6,10 @@ import { Header } from '@shared/components/Header';
 import { Footer } from '@shared/components/Footer';
 
 import { Inter as FontSans } from 'next/font/google';
-import { cn } from '@lib/utils';
+import { cn } from '@shared/shadcn/utils';
 import { ThemeProvider } from '@shared/components/ThemeProvider';
+import { Toaster } from '@shared/shadcn/ui/toaster';
+import { AuthProvider } from '@auth/providers/AuthProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -42,9 +44,12 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Header />
-            {children}
-            <Footer />
+            <AuthProvider>
+              <Header />
+              {children}
+              <Footer />
+              <Toaster />
+            </AuthProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
