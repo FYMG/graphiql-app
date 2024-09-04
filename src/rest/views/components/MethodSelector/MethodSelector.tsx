@@ -7,13 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@shared/components/ui/select';
+import { Methods } from '@rest/constants';
 
 interface MethodSelectorProps {
-  method: string;
-  setMethod: (method: string) => void;
+  method: Methods;
+  setMethod: (method: Methods) => void;
 }
 
-const methods = ['GET', 'POST', 'PUT', 'DELETE'];
+const methods = [Methods.Get, Methods.Post, Methods.Put, Methods.Delete];
 
 function MethodSelector({ method, setMethod }: MethodSelectorProps) {
   return (

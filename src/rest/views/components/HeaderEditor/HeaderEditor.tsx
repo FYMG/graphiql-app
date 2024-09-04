@@ -2,11 +2,7 @@ import React, { useId } from 'react';
 
 import { Input } from '@shared/components/ui/input';
 import { Button } from '@shared/components/ui/button';
-
-interface HeaderEditorProps {
-  headers: { key: string; value: string }[];
-  setHeaders: (headers: { key: string; value: string }[]) => void;
-}
+import { HeaderEditorProps } from '@rest/constants';
 
 function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
   const headerBlockId = useId();

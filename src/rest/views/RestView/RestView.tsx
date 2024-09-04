@@ -7,6 +7,7 @@ import applyVariables from '@rest/utils/applyVariablesUtil';
 
 import { Button } from '@shared/components/ui/button';
 import { Input } from '@shared/components/ui/input';
+import { KeyAndValue, Methods } from '@rest/constants';
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
 import { BodyEditor } from '../components/BodyEditor';
@@ -14,14 +15,14 @@ import ResponseField from '../components/ResponseField/ResponseField';
 import { VariablesEditor } from '../components/VariablesEditor';
 
 function RestView() {
-  const [method, setMethod] = useState('GET');
-  const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
+  const [method, setMethod] = useState(Methods.Get);
+  const [headers, setHeaders] = useState<KeyAndValue[]>([]);
   const [body, setBody] = useState('');
   const [url, setUrl] = useState<string>('');
   const [response, setResponse] = useState<Record<string, unknown> | null>(null);
   const [status, setStatus] = useState<number | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
-  const [variables, setVariables] = useState<{ key: string; value: string }[]>([]);
+  const [variables, setVariables] = useState<KeyAndValue[]>([]);
   const [loading, setLoading] = useState(false);
 
   const sendRequest = async () => {

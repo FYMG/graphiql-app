@@ -2,16 +2,7 @@ import React, { useId } from 'react';
 
 import { Input } from '@shared/components/ui/input';
 import { Button } from '@shared/components/ui/button';
-
-interface Variable {
-  key: string;
-  value: string;
-}
-
-interface VariablesEditorProps {
-  setVariables: (variables: Variable[]) => void;
-  variables: Variable[];
-}
+import { VariablesEditorProps } from '@rest/constants';
 
 function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
   const blockId = useId();
