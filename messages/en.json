@@ -1,1 +1,28 @@
-{}
+{
+  "shared": {
+    "en": "🇬🇧 English",
+    "ru": "🇷🇺 Русский",
+    "select-language": "Select Language"
+  },
+  "auth": {
+    "logout-success": "Logged out successfully",
+    "login-success": "Login successful",
+    "register-success": "Registration successful",
+    "email-already-in-use": "Email already in use",
+    "password-too-short": "Password must be at least 6 characters",
+    "invalid-email": "Invalid email",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "register-failed": "Registration failed",
+    "login-failed": "Login failed",
+    "login": "Login",
+    "repeat-password": "Repeat Password",
+    "passwords-dont-match": "Passwords don't match",
+    "required": "Field is required",
+    "invalid-credentials": "Invalid credentials",
+    "too-many-requests": "Too many requests. Please try again later.",
+    "password-required": "Password is required for login",
+    "user-disabled": "User disabled"
+  }
+}
