@@ -9,6 +9,7 @@
     "next/core-web-vitals",
     "plugin:prettier/recommended"
   ],
+  "ignorePatterns": ["src/shared/shadcn/**/*"],
   "rules": {
     "react/jsx-props-no-spreading": 0,
     "import/prefer-default-export": 0,

@@ -1,26 +1,29 @@
 'use client';
 
-import { useLanguageSwitcher } from '@shared/hooks';
 import Link from 'next/link';
 import { routes } from '@shared/configs';
+import { useAuth } from '@auth/providers/AuthProvider';
+import LocaleDropDown from 'src/shared/components/LocaleSelect';
+import { ThemeToggle } from '@shared/components/ThemeToggle';
 
 function Header() {
-  const { changeLanguage } = useLanguageSwitcher();
+  const { logout, isAuth } = useAuth();
 
   return (
     <header className="dark flex justify-between">
       <Link href={routes.main}>Header</Link>
       <div>
-        <button type="button" onClick={() => changeLanguage('en')}>
-          English
-        </button>
-        <button type="button" onClick={() => changeLanguage('ru')}>
-          Русский
-        </button>
+        <ThemeToggle />
+        <LocaleDropDown />
       </div>
       <div>
-        <Link href={routes.login}>Login</Link>
-        <Link href={routes.register}>Register</Link>
+        {isAuth ? (
+          <button type="button" onClick={logout}>
+            Logout
+          </button>
+        ) : (
+          <Link href={routes.login}>Login</Link>
+        )}
         <Link href={routes.history}>History</Link>
       </div>
     </header>
