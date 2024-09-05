@@ -1,10 +1,14 @@
-import React, { useId } from 'react';
+'use client';
+
+import React, { useId, useState } from 'react';
 
 import { Input } from '@shared/components/ui/input';
 import { Button } from '@shared/components/ui/button';
 import { VariablesEditorProps } from '@rest/constants';
 
 function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
+  const [hidden, setHidden] = useState(false);
+
   const blockId = useId();
   const addVariable = () => {
     setVariables([...variables, { key: '', value: '' }]);
@@ -22,31 +26,43 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
     setVariables(variables.filter((_, i) => i !== index));
   };
 
+  const hiddenVariable = () => {
+    setHidden(!hidden);
+  };
+
   return (
     <div className="mb-2">
-      <h3 className="font-semibold">Variables</h3>
-      {variables.map((variable, index) => (
-        <div
-          key={blockId}
-          className="flex justify-between gap-2 rounded-md border border-gray-300 px-1 py-1"
-        >
-          <Input
-            type="text"
-            placeholder="Variable Key"
-            value={variable.key}
-            onChange={(e) => updateVariable(index, e.target.value, variable.value)}
-          />
-          <Input
-            type="text"
-            placeholder="Variable Value"
-            value={variable.value}
-            onChange={(e) => updateVariable(index, variable.key, e.target.value)}
-          />
-          <Button variant="default" onClick={() => removeVariable(index)}>
-            Remove
+      <div className="flex justify-between">
+        <h3 className="font-semibold">Variables</h3>
+        {variables.length ? (
+          <Button variant="default" onClick={() => hiddenVariable()}>
+            {hidden ? 'Show' : 'Hide'}
           </Button>
-        </div>
-      ))}
+        ) : null}
+      </div>
+      {!hidden &&
+        variables.map((variable, index) => (
+          <div
+            key={blockId}
+            className="flex justify-between gap-2 rounded-md border border-gray-300 px-1 py-1"
+          >
+            <Input
+              type="text"
+              placeholder="Variable Key"
+              value={variable.key}
+              onChange={(e) => updateVariable(index, e.target.value, variable.value)}
+            />
+            <Input
+              type="text"
+              placeholder="Variable Value"
+              value={variable.value}
+              onChange={(e) => updateVariable(index, variable.key, e.target.value)}
+            />
+            <Button variant="default" onClick={() => removeVariable(index)}>
+              Remove
+            </Button>
+          </div>
+        ))}
       <Button
         variant="link"
         onClick={addVariable}
