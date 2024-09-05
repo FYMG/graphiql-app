@@ -58,13 +58,22 @@ function RegistrationForm() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    const title = t('register-failed');
+    let title: string | undefined;
+
     let errorMessage: string | undefined;
 
     try {
+      title = t('register-success');
       await createUserWithEmailAndPassword(auth, data.email, data.password);
       router.push(routes.main);
+      toast({
+        title,
+        variant: 'default',
+        duration: 3000,
+      });
     } catch (error) {
+      title = t('register-failed');
+
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case 'auth/email-already-in-use':

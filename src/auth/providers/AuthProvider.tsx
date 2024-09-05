@@ -12,6 +12,8 @@ import {
 
 import { onAuthStateChanged, signOut, User } from '@firebase/auth';
 import { auth } from '@shared/configs/firebase';
+import { useToast } from '@shared/shadcn/hooks/use-toast';
+import { useTranslations } from 'next-intl';
 
 interface AuthContextValue {
   isAuth: boolean;
@@ -27,14 +29,12 @@ const AuthContext = createContext<AuthContextValue>({
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const t = useTranslations('auth');
+  const { toast } = useToast();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (_user) => {
-      if (_user) {
-        setUser(_user);
-      } else {
-        setUser(null);
-      }
+      setUser(_user);
     });
 
     return () => unsubscribe();
@@ -43,7 +43,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(async () => {
     await signOut(auth);
     setUser(null);
-  }, []);
+    toast({
+      title: t('logout-success'),
+      variant: 'default',
+      duration: 3000,
+    });
+  }, [t, toast]);
 
   const value = useMemo(() => {
     return { user, logout, isAuth: !!user };

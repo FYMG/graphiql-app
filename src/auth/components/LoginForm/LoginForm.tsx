@@ -46,13 +46,21 @@ function LoginForm() {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof FormSchema>> = async (data) => {
-    const title = t('login-failed');
+    let title: string | undefined;
     let errorMessage: string | undefined;
 
     try {
+      title = t('login-success');
       await signInWithEmailAndPassword(auth, data.email, data.password);
       router.push(routes.main);
+      toast({
+        title,
+        variant: 'default',
+        duration: 3000,
+      });
     } catch (error) {
+      title = t('login-failed');
+
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case 'auth/invalid-credential':
