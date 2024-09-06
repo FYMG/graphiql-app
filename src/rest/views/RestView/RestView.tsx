@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import applyVariables from '@rest/utils/applyVariablesUtil';
@@ -8,6 +8,8 @@ import applyVariables from '@rest/utils/applyVariablesUtil';
 import { Button } from '@shared/shadcn/ui/button';
 import { Input } from '@shared/shadcn/ui/input';
 import { KeyAndValue, Methods } from '@rest/constants';
+import { generateEncodedUrl } from '@rest/utils/generateEncodedUrl';
+
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
 import { BodyEditor } from '../components/BodyEditor';
@@ -24,28 +26,19 @@ function RestView() {
   const [urlError, setUrlError] = useState<string | null>(null);
   const [variables, setVariables] = useState<KeyAndValue[]>([]);
   const [loading, setLoading] = useState(false);
+  const [encodedBody, setEncodedBody] = useState('');
+
+  useEffect(() => {
+    const fullUrl = generateEncodedUrl(method, url, headers, encodedBody);
+
+    window.history.replaceState(null, '', fullUrl);
+  }, [encodedBody, url, headers, method]);
 
   const sendRequest = async () => {
     setResponse({});
     setUrlError(null);
 
-    if (!url.trim()) {
-      setUrlError('Please enter a valid URL');
-
-      return;
-    }
-
-    const encodedUrl = btoa(url);
-    const encodedBody = body ? btoa(JSON.stringify(body)) : '';
-    const queryParams = headers
-      .filter((header) => header.key && header.value)
-      .map(
-        (header) =>
-          `${encodeURIComponent(header.key)}=${encodeURIComponent(header.value)}`
-      )
-      .join('&');
-
-    const fullUrl = `/${method}/${encodedUrl}/${encodedBody}?${queryParams}`;
+    const fullUrl = generateEncodedUrl(method, url, headers, encodedBody);
 
     window.history.replaceState(null, '', fullUrl);
     try {
@@ -113,7 +106,7 @@ function RestView() {
       </div>
       <VariablesEditor variables={variables} setVariables={setVariables} />
       <HeaderEditor headers={headers} setHeaders={setHeaders} />
-      <BodyEditor body={body} setBody={setBody} />
+      <BodyEditor body={body} setBody={setBody} setEncodedBody={setEncodedBody} />
       <ResponseField status={status} response={response} loading={loading} />
     </div>
   );
