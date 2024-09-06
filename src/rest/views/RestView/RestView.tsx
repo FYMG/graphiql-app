@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import axios, { AxiosResponse, AxiosError } from 'axios';
+import debounce from 'lodash/debounce';
 
 import applyVariables from '@rest/utils/applyVariablesUtil';
 
@@ -28,11 +29,19 @@ function RestView() {
   const [loading, setLoading] = useState(false);
   const [encodedBody, setEncodedBody] = useState('');
 
-  useEffect(() => {
-    const fullUrl = generateEncodedUrl(method, url, headers, encodedBody);
+  const updateUrlWithDebounce = useMemo(() => {
+    return debounce((newUrl: string) => {
+      const fullUrl = generateEncodedUrl(method, newUrl, headers, encodedBody);
 
-    window.history.replaceState(null, '', fullUrl);
-  }, [encodedBody, url, headers, method]);
+      window.history.replaceState(null, '', fullUrl);
+    }, 500);
+  }, [encodedBody, headers, method]);
+
+  useEffect(() => {
+    if (url) {
+      updateUrlWithDebounce(url);
+    }
+  }, [updateUrlWithDebounce, url]);
 
   const sendRequest = async () => {
     setResponse({});
