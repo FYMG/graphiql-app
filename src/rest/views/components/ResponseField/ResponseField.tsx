@@ -26,7 +26,7 @@ function ResponseField({ status, response, loading }: ResponseFieldProps) {
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 px-1">
       <h3 className="mb-2 font-semibold">Response</h3>
       {status ? (
         <>

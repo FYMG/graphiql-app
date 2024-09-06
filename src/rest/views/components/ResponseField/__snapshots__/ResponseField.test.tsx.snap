@@ -3,7 +3,7 @@
 exports[`ResponseField matches snapshot when response is null, loading is false, and status is 200 1`] = `
 <DocumentFragment>
   <div
-    class="mb-4"
+    class="mb-4 px-1"
   >
     <h3
       class="mb-2 font-semibold"

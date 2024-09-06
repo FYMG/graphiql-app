@@ -31,7 +31,7 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
   };
 
   return (
-    <div className="mb-2">
+    <div className="mb-2 px-1">
       <div className="flex justify-between">
         <h3 className="font-semibold">Headers</h3>
         {headers.length ? (

@@ -33,7 +33,7 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
   };
 
   return (
-    <div className="mb-2">
+    <div className="mb-2 px-1">
       <div className="flex justify-between">
         <h3 className="font-semibold">Variables</h3>
         {variables.length ? (

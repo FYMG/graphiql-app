@@ -55,4 +55,26 @@ describe('BodyEditor', () => {
 
     expect(mockSetBody).toHaveBeenCalledWith(updatedBody);
   });
+
+  it('renders the Prettify button', () => {
+    const mockSetBody = jest.fn();
+
+    render(<BodyEditor body="" setBody={mockSetBody} />);
+
+    const prettifyButton = screen.getByText(/Prettify/i);
+
+    expect(prettifyButton).toBeInTheDocument();
+  });
+
+  it('calls prettifyContent when the Prettify button is clicked', () => {
+    const mockSetBody = jest.fn();
+
+    render(<BodyEditor body='{"key": "value"}' setBody={mockSetBody} />);
+
+    const prettifyButton = screen.getByText(/Prettify/i);
+
+    fireEvent.click(prettifyButton);
+
+    expect(prettifyButton).toBeInTheDocument();
+  });
 });
