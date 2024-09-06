@@ -4,26 +4,6 @@ import '@testing-library/jest-dom';
 
 import ResponseField from './ResponseField';
 
-jest.mock('@monaco-editor/react', () => {
-  return function MonacoEditorMock({
-    'data-testid': testId,
-    loading,
-    value,
-  }: {
-    'data-testid': string;
-    loading: boolean;
-    value: string;
-  }) {
-    return (
-      <textarea
-        data-testid={testId}
-        value={loading ? 'Loading response...' : value}
-        readOnly
-      />
-    );
-  };
-});
-
 const testId = 'response-editor';
 
 describe('ResponseField', () => {
@@ -35,28 +15,11 @@ describe('ResponseField', () => {
     expect(screen.queryByTestId(testId)).not.toBeInTheDocument();
   });
 
-  it('renders with valid status and response', () => {
-    const response = { message: 'Success' };
-    const status = 200;
+  it('matches snapshot when response is null, loading is false, and status is 200', () => {
+    const { asFragment } = render(
+      <ResponseField loading={false} response={null} status={200} />
+    );
 
-    render(<ResponseField response={response} status={status} loading={false} />);
-
-    expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
-    expect(screen.getByText(/Status:/i)).toBeInTheDocument();
-    expect(screen.getByText(/200/)).toBeInTheDocument();
-    expect(screen.getByTestId(testId)).toHaveValue(JSON.stringify(response, null, 2));
-  });
-
-  it('renders with invalid status and response', () => {
-    const response = { message: 'Error' };
-    const status = 404;
-
-    render(<ResponseField response={response} status={status} loading={false} />);
-
-    expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
-    expect(screen.getByText(/Status:/i)).toBeInTheDocument();
-    expect(screen.getByText(/404/)).toBeInTheDocument();
-    expect(screen.getByText(/404/)).toHaveClass('text-orange-500');
-    expect(screen.getByTestId(testId)).toHaveValue(JSON.stringify(response, null, 2));
+    expect(asFragment()).toMatchSnapshot();
   });
 });

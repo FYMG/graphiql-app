@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
+import * as monacoEditor from 'monaco-editor';
 
 import {
   Select,
@@ -8,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@shared/shadcn/ui/select';
+import { Button } from '@shared/shadcn/ui/button';
 
 interface BodyEditorProps {
   body: string;
@@ -19,8 +21,22 @@ type BodyFormat = 'JSON' | 'Plain Text';
 function BodyEditor({ body, setBody }: BodyEditorProps) {
   const [format, setFormat] = useState<BodyFormat>('JSON');
 
+  const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
+
   const onFormatChange = (newFormat: BodyFormat) => {
     setFormat(newFormat);
+  };
+
+  const handleEditorDidMount = (
+    editorInstance: monacoEditor.editor.IStandaloneCodeEditor
+  ) => {
+    editorRef.current = editorInstance;
+  };
+
+  const prettifyContent = () => {
+    if (editorRef.current) {
+      editorRef.current?.getAction('editor.action.formatDocument')?.run();
+    }
   };
 
   return (
@@ -42,10 +58,14 @@ function BodyEditor({ body, setBody }: BodyEditorProps) {
         value={body}
         options={{ automaticLayout: true }}
         onChange={(value) => setBody(value || '')}
+        onMount={handleEditorDidMount}
         height="100px"
         width="100%"
         data-testid="body-editor"
       />
+      <Button variant={body.length ? 'default' : 'secondary'} onClick={prettifyContent}>
+        Prettify
+      </Button>
     </div>
   );
 }

@@ -31,7 +31,7 @@ function ResponseField({ status, response, loading }: ResponseFieldProps) {
       {status ? (
         <>
           <p>
-            Status:{' '}
+            Status:
             <span className={textColorClass}>{loading ? 'Loading...' : status}</span>
           </p>
           <Editor
