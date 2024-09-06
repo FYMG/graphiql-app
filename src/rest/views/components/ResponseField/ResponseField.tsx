@@ -1,6 +1,6 @@
 import React from 'react';
-import Editor from '@monaco-editor/react';
 
+import { Editor } from '@monaco-editor/react';
 import { EmptyResponseField } from '../EmptyResponseField';
 
 interface ResponseFieldProps {

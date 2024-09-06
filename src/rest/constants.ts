@@ -16,3 +16,9 @@ export interface VariablesEditorProps {
   setVariables: (variables: KeyAndValue[]) => void;
   variables: KeyAndValue[];
 }
+
+export interface DropDownBtnProps {
+  isHidden: boolean;
+  onClick: () => void;
+  text: string;
+}

@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@shared/components/ui/select';
+} from '@shared/shadcn/ui/select';
 
 interface BodyEditorProps {
   body: string;

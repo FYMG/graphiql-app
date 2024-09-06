@@ -5,8 +5,8 @@ import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import applyVariables from '@rest/utils/applyVariablesUtil';
 
-import { Button } from '@shared/components/ui/button';
-import { Input } from '@shared/components/ui/input';
+import { Button } from '@shared/shadcn/ui/button';
+import { Input } from '@shared/shadcn/ui/input';
 import { KeyAndValue, Methods } from '@rest/constants';
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';

@@ -2,15 +2,17 @@
 
 import React, { useId, useState } from 'react';
 
-import { Input } from '@shared/components/ui/input';
-import { Button } from '@shared/components/ui/button';
+import { Input } from '@shared/shadcn/ui/input';
+import { Button } from '@shared/shadcn/ui/button';
 import { VariablesEditorProps } from '@rest/constants';
+import { DropDownBtn } from '../DropDownBtn';
 
 function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
-  const [hidden, setHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
 
   const blockId = useId();
   const addVariable = () => {
+    setIsHidden(false);
     setVariables([...variables, { key: '', value: '' }]);
   };
 
@@ -27,7 +29,7 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
   };
 
   const hiddenVariable = () => {
-    setHidden(!hidden);
+    setIsHidden(!isHidden);
   };
 
   return (
@@ -35,12 +37,10 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
       <div className="flex justify-between">
         <h3 className="font-semibold">Variables</h3>
         {variables.length ? (
-          <Button variant="default" onClick={() => hiddenVariable()}>
-            {hidden ? 'Show' : 'Hide'}
-          </Button>
+          <DropDownBtn isHidden={isHidden} onClick={hiddenVariable} text="variables" />
         ) : null}
       </div>
-      {!hidden &&
+      {!isHidden &&
         variables.map((variable, index) => (
           <div
             key={blockId}
