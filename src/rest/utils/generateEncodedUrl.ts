@@ -1,3 +1,7 @@
+const encodeBase64 = (str: string): string => {
+  return window.btoa(unescape(encodeURIComponent(str)));
+};
+
 export const generateEncodedUrl = (
   method: string,
   url: string,
@@ -8,7 +12,7 @@ export const generateEncodedUrl = (
     return '';
   }
 
-  const encodedUrl = btoa(url);
+  const encodedUrl = encodeBase64(url);
   const queryParams = headers
     .filter((header) => header.key && header.value)
     .map(
