@@ -7,7 +7,11 @@ function DropDownBtn({ isHidden, onClick, text }: DropDownBtnProps) {
   return (
     <button type="button" onClick={onClick} className="flex items-center gap-2">
       {!isHidden ? `Hide ${text}` : `Show ${text}`}
-      {!isHidden ? <FiChevronUp /> : <FiChevronDown />}
+      {!isHidden ? (
+        <FiChevronUp data-testid="FiChevronUp" />
+      ) : (
+        <FiChevronDown data-testid="FiChevronDown" />
+      )}
     </button>
   );
 }
