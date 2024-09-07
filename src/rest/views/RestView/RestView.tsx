@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import debounce from 'lodash/debounce';
+import { useTranslations } from 'next-intl';
 
 import applyVariables from '@rest/utils/applyVariablesUtil';
 
@@ -24,10 +25,12 @@ function RestView() {
   const [url, setUrl] = useState<string>('');
   const [response, setResponse] = useState<Record<string, unknown> | null>(null);
   const [status, setStatus] = useState<number | null>(null);
-  const [urlError, setUrlError] = useState<string | null>(null);
+  const [urlError, setUrlError] = useState<boolean>(false);
   const [variables, setVariables] = useState<KeyAndValue[]>([]);
   const [loading, setLoading] = useState(false);
   const [encodedBody, setEncodedBody] = useState('');
+
+  const t = useTranslations('rest');
 
   const updateUrlWithDebounce = useMemo(() => {
     return debounce((newUrl: string) => {
@@ -43,9 +46,18 @@ function RestView() {
     }
   }, [updateUrlWithDebounce, url]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUrl(e.target.value);
+    setUrlError(false);
+  };
+
   const sendRequest = async () => {
     setResponse({});
-    setUrlError(null);
+    setUrlError(false);
+
+    if (!url.trim()) {
+      setUrlError(true);
+    }
 
     const fullUrl = generateEncodedUrl(method, url, headers, encodedBody);
 
@@ -103,14 +115,14 @@ function RestView() {
         <MethodSelector method={method} setMethod={setMethod} />
         <Input
           type="text"
-          placeholder={urlError ? 'Please enter a valid URL' : 'Your request'}
+          placeholder={urlError ? t('error-placeholder') : t('placeholder')}
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={onKeyPress}
           className={`w-auto grow ${urlError ? 'border border-red-500' : ''}`}
         />
         <Button variant={url.length ? 'default' : 'secondary'} onClick={sendRequest}>
-          Send
+          {t('send')}
         </Button>
       </div>
       <VariablesEditor variables={variables} setVariables={setVariables} />

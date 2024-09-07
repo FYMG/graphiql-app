@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useId, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Input } from '@shared/shadcn/ui/input';
 import { Button } from '@shared/shadcn/ui/button';
@@ -9,6 +10,7 @@ import { DropDownBtn } from '../DropDownBtn';
 
 function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
   const [isHidden, setIsHidden] = useState(false);
+  const t = useTranslations('rest');
 
   const blockId = useId();
   const addVariable = () => {
@@ -35,9 +37,13 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
   return (
     <div className="mb-2 px-1">
       <div className="flex justify-between">
-        <h3 className="font-semibold">Variables</h3>
+        <h3 className="font-semibold">{t('variables')}</h3>
         {variables.length ? (
-          <DropDownBtn isHidden={isHidden} onClick={hiddenVariable} text="variables" />
+          <DropDownBtn
+            isHidden={isHidden}
+            onClick={hiddenVariable}
+            text={t('variables').toLowerCase()}
+          />
         ) : null}
       </div>
       {!isHidden &&
@@ -48,18 +54,18 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
           >
             <Input
               type="text"
-              placeholder="Variable Key"
+              placeholder={t('variable-key')}
               value={variable.key}
               onChange={(e) => updateVariable(index, e.target.value, variable.value)}
             />
             <Input
               type="text"
-              placeholder="Variable Value"
+              placeholder={t('variable-value')}
               value={variable.value}
               onChange={(e) => updateVariable(index, variable.key, e.target.value)}
             />
             <Button variant="default" onClick={() => removeVariable(index)}>
-              Remove
+              {t('remove')}
             </Button>
           </div>
         ))}
@@ -68,7 +74,7 @@ function VariablesEditor({ variables, setVariables }: VariablesEditorProps) {
         onClick={addVariable}
         className="m-0 h-auto p-0 text-sm text-blue-400 transition delay-150 hover:text-blue-700 hover:no-underline"
       >
-        Add Variables
+        {t('add-variable')}
       </Button>
     </div>
   );

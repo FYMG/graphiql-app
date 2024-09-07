@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import Editor from '@monaco-editor/react';
 import * as monacoEditor from 'monaco-editor';
 
@@ -21,6 +22,7 @@ type BodyFormat = 'JSON' | 'Plain Text';
 
 function BodyEditor({ body, setBody, setEncodedBody }: BodyEditorProps) {
   const [format, setFormat] = useState<BodyFormat>('JSON');
+  const t = useTranslations('rest');
 
   const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor | null>(null);
 
@@ -49,7 +51,7 @@ function BodyEditor({ body, setBody, setEncodedBody }: BodyEditorProps) {
 
   return (
     <div className="mb-4 px-1">
-      <h3 className="mb-2 font-semibold">Body</h3>
+      <h3 className="mb-2 font-semibold">{t('body')}</h3>
       <div className="flex justify-start gap-2">
         <Select onValueChange={onFormatChange} value={format}>
           <SelectTrigger className="mb-2 w-auto gap-2 border-r focus:outline-none">
@@ -57,11 +59,11 @@ function BodyEditor({ body, setBody, setEncodedBody }: BodyEditorProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="JSON">JSON</SelectItem>
-            <SelectItem value="Plain Text">Plain Text</SelectItem>
+            <SelectItem value="Plain Text">{t('plain-text')}</SelectItem>
           </SelectContent>
         </Select>
         <Button variant={body.length ? 'default' : 'secondary'} onClick={prettifyContent}>
-          Prettify
+          {t('prettify')}
         </Button>
       </div>
 

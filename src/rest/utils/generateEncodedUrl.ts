@@ -8,10 +8,6 @@ export const generateEncodedUrl = (
   headers: { key: string; value: string }[],
   encodedBody: string
 ): string => {
-  if (!url.trim()) {
-    return '';
-  }
-
   const encodedUrl = encodeBase64(url);
   const queryParams = headers
     .filter((header) => header.key && header.value)

@@ -1,4 +1,5 @@
 import React, { useId, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { Input } from '@shared/shadcn/ui/input';
 import { Button } from '@shared/shadcn/ui/button';
@@ -7,6 +8,7 @@ import { DropDownBtn } from '../DropDownBtn';
 
 function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
   const [isHidden, setIsHidden] = useState(false);
+  const t = useTranslations('rest');
 
   const headerBlockId = useId();
   const addHeader = () => {
@@ -33,9 +35,13 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
   return (
     <div className="mb-2 px-1">
       <div className="flex justify-between">
-        <h3 className="font-semibold">Headers</h3>
+        <h3 className="font-semibold">{t('headers')}</h3>
         {headers.length ? (
-          <DropDownBtn isHidden={isHidden} onClick={hiddenHeaders} text="headers" />
+          <DropDownBtn
+            isHidden={isHidden}
+            onClick={hiddenHeaders}
+            text={t('headers').toLowerCase()}
+          />
         ) : null}
       </div>
       {!isHidden &&
@@ -46,18 +52,18 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
           >
             <Input
               type="text"
-              placeholder="Header Key"
+              placeholder={t('header-key')}
               value={header.key}
               onChange={(e) => updateHeader(index, e.target.value, header.value)}
             />
             <Input
               type="text"
-              placeholder="Header Value"
+              placeholder={t('header-value')}
               value={header.value}
               onChange={(e) => updateHeader(index, header.key, e.target.value)}
             />
             <Button variant="default" onClick={() => removeHeader(index)}>
-              Remove
+              {t('remove')}
             </Button>
           </div>
         ))}
@@ -67,7 +73,7 @@ function HeaderEditor({ headers, setHeaders }: HeaderEditorProps) {
         onClick={addHeader}
         className="m-0 h-auto p-0 text-sm text-blue-400 transition delay-150 hover:text-blue-700 hover:no-underline"
       >
-        Add Header
+        {t('add-header')}
       </Button>
     </div>
   );
