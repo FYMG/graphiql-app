@@ -3,6 +3,17 @@ import '@testing-library/jest-dom';
 
 import DropDownBtn from './DropDownBtn';
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: { [key: string]: string } = {
+      hide: 'Hide',
+      show: 'Show',
+    };
+
+    return translations[key];
+  },
+}));
+
 describe('BodyEditor', () => {
   it('should show "Show text" if isHidden is true', () => {
     render(<DropDownBtn isHidden onClick={() => {}} text="text" />);

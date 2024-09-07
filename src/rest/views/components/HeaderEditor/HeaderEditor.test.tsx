@@ -4,88 +4,88 @@ import '@testing-library/jest-dom';
 
 import HeaderEditor from './HeaderEditor';
 
+const headerValue = 'Header value';
+const headerKey = 'Header key';
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: { [key: string]: string } = {
+      headers: 'Headers',
+      'header-key': headerKey,
+      'header-value': headerValue,
+      'add-header': 'Add header',
+      remove: 'Remove',
+    };
+
+    return translations[key];
+  },
+}));
+
 describe('HeaderEditor', () => {
-  const contentType = 'Content-Type';
-  const bearerToken = 'Bearer token';
+  it('renders the component with headers', () => {
+    const headers = [{ key: 'key1', value: 'value1' }];
+    const setHeaders = jest.fn();
 
-  let headers = [
-    { key: contentType, value: 'application/json' },
-    { key: 'Authorization', value: bearerToken },
-  ];
-
-  const setHeaders = jest.fn((newHeaders) => {
-    headers = newHeaders;
-  });
-
-  beforeEach(() => {
-    headers = [
-      { key: contentType, value: 'application/json' },
-      { key: 'Authorization', value: bearerToken },
-    ];
-    setHeaders.mockClear();
-  });
-
-  it('renders headers correctly', () => {
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
-    const inputs = screen.getAllByPlaceholderText(/header/i);
+    expect(screen.getByText('Headers')).toBeInTheDocument();
 
-    expect(inputs).toHaveLength(4);
-    expect(inputs[0]).toHaveValue(contentType);
-    expect(inputs[1]).toHaveValue('application/json');
-    expect(inputs[2]).toHaveValue('Authorization');
-    expect(inputs[3]).toHaveValue(bearerToken);
+    expect(screen.getByPlaceholderText(headerKey)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(headerValue)).toBeInTheDocument();
   });
 
-  it('adds a new header', () => {
+  it('adds a new empty variable on button click', () => {
+    const headers = [{ key: '', value: '' }];
+    const setHeaders = jest.fn();
+
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
-    const addButton = screen.getByText('Add Header');
+    const addButton = screen.getByText('Add header');
 
     fireEvent.click(addButton);
 
     expect(setHeaders).toHaveBeenCalledWith([
-      { key: contentType, value: 'application/json' },
-      { key: 'Authorization', value: bearerToken },
+      { key: '', value: '' },
       { key: '', value: '' },
     ]);
   });
 
-  it('updates a header key', () => {
+  it('calls setHeaders when removing a variable', () => {
+    const headers = [{ key: 'key1', value: 'value1' }];
+    const setHeaders = jest.fn();
+
     render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
 
-    const keyInput = screen.getAllByPlaceholderText('Header Key')[0];
-
-    fireEvent.change(keyInput, { target: { value: 'Accept' } });
-
-    expect(setHeaders).toHaveBeenCalledWith([
-      { key: 'Accept', value: 'application/json' },
-      { key: 'Authorization', value: bearerToken },
-    ]);
-  });
-
-  it('updates a header value', () => {
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
-
-    const valueInput = screen.getAllByPlaceholderText('Header Value')[0];
-
-    fireEvent.change(valueInput, { target: { value: 'text/plain' } });
-
-    expect(setHeaders).toHaveBeenCalledWith([
-      { key: contentType, value: 'text/plain' },
-      { key: 'Authorization', value: bearerToken },
-    ]);
-  });
-
-  it('removes a header', () => {
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
-
-    const removeButton = screen.getAllByText('Remove')[0];
+    const removeButton = screen.getByText('Remove');
 
     fireEvent.click(removeButton);
 
-    expect(setHeaders).toHaveBeenCalledWith([
-      { key: 'Authorization', value: bearerToken },
-    ]);
+    expect(setHeaders).toHaveBeenCalledWith([]);
+  });
+
+  it('calls setHeaders when updating a variable value', () => {
+    const headers = [{ key: 'key1', value: 'value1' }];
+    const setHeaders = jest.fn();
+
+    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+
+    const valueInput = screen.getByPlaceholderText(headerValue);
+
+    fireEvent.change(valueInput, { target: { value: 'newValue' } });
+
+    expect(setHeaders).toHaveBeenCalledWith([{ key: 'key1', value: 'newValue' }]);
+  });
+
+  it('calls setHeaders when updating a variable key', () => {
+    const headers = [{ key: 'key1', value: 'value1' }];
+    const setHeaders = jest.fn();
+
+    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+
+    const keyInput = screen.getByPlaceholderText(headerKey);
+
+    fireEvent.change(keyInput, { target: { value: 'newKey' } });
+
+    expect(setHeaders).toHaveBeenCalledWith([{ key: 'newKey', value: 'value1' }]);
   });
 });

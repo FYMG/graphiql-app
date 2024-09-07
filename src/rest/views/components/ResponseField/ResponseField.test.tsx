@@ -6,6 +6,17 @@ import ResponseField from './ResponseField';
 
 const testId = 'response-editor';
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: { [key: string]: string } = {
+      response: 'Response',
+      status: 'Status',
+    };
+
+    return translations[key];
+  },
+}));
+
 describe('ResponseField', () => {
   it('renders with null response and status', () => {
     render(<ResponseField response={null} status={null} loading={false} />);

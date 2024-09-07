@@ -23,6 +23,16 @@ jest.mock('next/image', () => {
   return MockedImage;
 });
 
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: { [key: string]: string } = {
+      'empty-placeholder': 'Enter the URL and click Send to get a response',
+    };
+
+    return translations[key];
+  },
+}));
+
 describe('EmptyResponseField component', () => {
   it('renders the image with correct src, alt, width, and height', () => {
     render(<EmptyResponseField />);

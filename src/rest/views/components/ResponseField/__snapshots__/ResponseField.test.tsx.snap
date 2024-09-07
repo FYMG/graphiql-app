@@ -11,7 +11,7 @@ exports[`ResponseField matches snapshot when response is null, loading is false,
       Response
     </h3>
     <p>
-      Status:
+      Status
       <span
         class="text-green-500"
       >

@@ -4,73 +4,88 @@ import '@testing-library/jest-dom';
 
 import VariablesEditor from './VariablesEditor';
 
+const variableValue = 'Variable value';
+const variableKey = 'Variable key';
+
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: { [key: string]: string } = {
+      variables: 'Variables',
+      'variable-key': variableKey,
+      'variable-value': variableValue,
+      'add-variable': 'Add variable',
+      remove: 'Remove',
+    };
+
+    return translations[key];
+  },
+}));
+
 describe('VariablesEditor', () => {
-  let setVariablesMock: jest.Mock;
-  let initialVariables: { key: string; value: string }[];
-  const testUrl = 'https://jsonplaceholder.typicode.com/';
+  it('renders the component with variables', () => {
+    const variables = [{ key: 'key1', value: 'value1' }];
+    const setVariables = jest.fn();
 
-  beforeEach(() => {
-    setVariablesMock = jest.fn();
-    initialVariables = [{ key: 'url', value: testUrl }];
+    render(<VariablesEditor variables={variables} setVariables={setVariables} />);
+
+    expect(screen.getByText('Variables')).toBeInTheDocument();
+
+    expect(screen.getByPlaceholderText(variableKey)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(variableValue)).toBeInTheDocument();
   });
 
-  it('renders correctly with initial variables', () => {
-    render(
-      <VariablesEditor variables={initialVariables} setVariables={setVariablesMock} />
-    );
+  it('adds a new empty variable on button click', () => {
+    const variables = [{ key: '', value: '' }];
+    const setVariables = jest.fn();
 
-    expect(screen.getByPlaceholderText('Variable Key')).toHaveValue('url');
-    expect(screen.getByPlaceholderText('Variable Value')).toHaveValue(
-      'https://jsonplaceholder.typicode.com/'
-    );
-  });
+    render(<VariablesEditor variables={variables} setVariables={setVariables} />);
 
-  it('calls setVariables when adding a variable', () => {
-    render(
-      <VariablesEditor variables={initialVariables} setVariables={setVariablesMock} />
-    );
+    const addButton = screen.getByText('Add variable');
 
-    fireEvent.click(screen.getByText('Add Variables'));
+    fireEvent.click(addButton);
 
-    expect(setVariablesMock).toHaveBeenCalledWith([
-      { key: 'url', value: testUrl },
+    expect(setVariables).toHaveBeenCalledWith([
+      { key: '', value: '' },
       { key: '', value: '' },
     ]);
   });
 
-  it('calls setVariables when updating a variable key', () => {
-    render(
-      <VariablesEditor variables={initialVariables} setVariables={setVariablesMock} />
-    );
+  it('calls setVariables when removing a variable', () => {
+    const variables = [{ key: 'key1', value: 'value1' }];
+    const setVariables = jest.fn();
 
-    fireEvent.change(screen.getByPlaceholderText('Variable Key'), {
-      target: { value: 'updatedKey' },
-    });
+    render(<VariablesEditor variables={variables} setVariables={setVariables} />);
 
-    expect(setVariablesMock).toHaveBeenCalledWith([
-      { key: 'updatedKey', value: testUrl },
-    ]);
+    const removeButton = screen.getByText('Remove');
+
+    fireEvent.click(removeButton);
+
+    expect(setVariables).toHaveBeenCalledWith([]);
   });
 
   it('calls setVariables when updating a variable value', () => {
-    render(
-      <VariablesEditor variables={initialVariables} setVariables={setVariablesMock} />
-    );
+    const variables = [{ key: 'key1', value: 'value1' }];
+    const setVariables = jest.fn();
 
-    fireEvent.change(screen.getByPlaceholderText('Variable Value'), {
-      target: { value: 'newUrl' },
-    });
+    render(<VariablesEditor variables={variables} setVariables={setVariables} />);
 
-    expect(setVariablesMock).toHaveBeenCalledWith([{ key: 'url', value: 'newUrl' }]);
+    const valueInput = screen.getByPlaceholderText(variableValue);
+
+    fireEvent.change(valueInput, { target: { value: 'newValue' } });
+
+    expect(setVariables).toHaveBeenCalledWith([{ key: 'key1', value: 'newValue' }]);
   });
 
-  it('calls setVariables when removing a variable', () => {
-    render(
-      <VariablesEditor variables={initialVariables} setVariables={setVariablesMock} />
-    );
+  it('calls setVariables when updating a variable key', () => {
+    const variables = [{ key: 'key1', value: 'value1' }];
+    const setVariables = jest.fn();
 
-    fireEvent.click(screen.getByText('Remove'));
+    render(<VariablesEditor variables={variables} setVariables={setVariables} />);
 
-    expect(setVariablesMock).toHaveBeenCalledWith([]);
+    const keyInput = screen.getByPlaceholderText(variableKey);
+
+    fireEvent.change(keyInput, { target: { value: 'newKey' } });
+
+    expect(setVariables).toHaveBeenCalledWith([{ key: 'newKey', value: 'value1' }]);
   });
 });
