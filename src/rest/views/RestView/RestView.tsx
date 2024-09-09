@@ -15,7 +15,7 @@ import { generateEncodedUrl } from '@rest/utils/generateEncodedUrl';
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
 import { BodyEditor } from '../components/BodyEditor';
-import ResponseField from '../components/ResponseField/ResponseField';
+import { ResponseField } from '../components/ResponseField';
 import { VariablesEditor } from '../components/VariablesEditor';
 
 function RestView() {
