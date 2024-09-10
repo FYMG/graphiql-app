@@ -46,10 +46,10 @@ function Header() {
         <LocaleDropDown />
         {isAuth ? (
           <button type="button" onClick={logout}>
-            Logout
+            {t('logout')}
           </button>
         ) : (
-          <Link href={routes.login}>Login</Link>
+          <Link href={routes.login}>{t('login')}</Link>
         )}
       </div>
     </header>

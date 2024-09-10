@@ -4,6 +4,8 @@
     "description": "Rest GraphQL App"
   },
   "shared": {
+    "login": "Login",
+    "logout": "Logout",
     "mentors": "Mentors",
     "authors": "Authors",
     "footer-logo-alt": "Footer logo",
