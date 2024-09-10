@@ -39,7 +39,7 @@ function Header() {
       )}
     >
       <Link href={routes.main}>
-        <Image width={70} height={70} alt={t('header-logo-alt')} src="/logo.png" />
+        <Image width={50} height={50} alt={t('header-logo-alt')} src="/logo.png" />
       </Link>
       <div className="flex items-center gap-1">
         <ThemeToggle />

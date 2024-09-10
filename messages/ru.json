@@ -4,6 +4,10 @@
     "description": "Rest GraphQL App"
   },
   "shared": {
+    "mentors": "Менторы",
+    "authors": "Авторы",
+    "footer-logo-alt": "Footer logo",
+    "course-name": "REACT COURSE 2024",
     "header-logo-alt": "Логотип сайта",
     "en": "🇬🇧 English",
     "ru": "🇷🇺 Русский",
