@@ -13,4 +13,19 @@ const routes = {
   },
 };
 
+export const protectedRoutes = [
+  {
+    path: routes.login,
+    needAuth: false,
+  },
+  {
+    path: routes.register,
+    needAuth: false,
+  },
+  {
+    path: routes.history,
+    needAuth: true,
+  },
+] as const;
+
 export default routes;

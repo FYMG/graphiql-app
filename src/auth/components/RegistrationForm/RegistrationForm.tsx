@@ -96,7 +96,6 @@ function RegistrationForm() {
         description: errorMessage,
         variant: 'destructive',
         duration: 3000,
-        color: 'red',
       });
     }
   };

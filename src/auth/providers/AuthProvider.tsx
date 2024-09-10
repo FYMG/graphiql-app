@@ -14,6 +14,7 @@ import { onAuthStateChanged, signOut, User } from '@firebase/auth';
 import { auth } from '@shared/configs/firebase';
 import { useToast } from '@shared/shadcn/hooks/use-toast';
 import { useTranslations } from 'next-intl';
+import { createSession, removeSession } from '../../actions/auth-actions';
 
 interface AuthContextValue {
   isAuth: boolean;
@@ -33,7 +34,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (_user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (_user) => {
+      if (_user) {
+        await createSession(_user.uid);
+      } else {
+        await removeSession();
+      }
+
       setUser(_user);
     });
 

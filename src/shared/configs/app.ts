@@ -1,7 +1,8 @@
 const app = {
   locale: ['ru', 'en'] as const,
   defaultLocale: 'en' as const,
-  curseLink: 'https://rs.school/courses/reactjs',
+  SESSION_COOKIE_NAME: 'FIREBASE_SESSION' as const,
+  curseLink: 'https://rs.school/courses/reactjs' as const,
   authors: [
     {
       name: 'fymg',
@@ -15,7 +16,7 @@ const app = {
       name: 'sk85web',
       link: 'https://github.com/sk85web',
     },
-  ],
+  ] as const,
   mentors: [
     {
       name: 'exodie',
@@ -25,7 +26,7 @@ const app = {
       name: 'valr.lipsk',
       link: 'https://github.com/valr0lipsk',
     },
-  ],
+  ] as const,
 };
 
 export default app;
