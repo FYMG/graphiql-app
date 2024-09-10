@@ -30,6 +30,7 @@ function Header() {
 
   return (
     <header
+      data-testid="header"
       className={clsx(
         'top-0 flex items-center justify-between p-2 transition-all duration-300',
         {

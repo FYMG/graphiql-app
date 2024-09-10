@@ -1,50 +1,21 @@
 import { clsx } from 'clsx';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { app } from '@shared/configs';
 
 export interface FooterProps {
   className?: string;
 }
 
-const authors = [
-  {
-    name: 'fymg',
-    link: 'https://github.com/fymg',
-  },
-  {
-    name: 'woodo01',
-    link: 'https://github.com/woodo01',
-  },
-  {
-    name: 'sk85web',
-    link: 'https://github.com/sk85web',
-  },
-];
-
-const mentors = [
-  {
-    name: 'exodie',
-    link: 'https://github.com/exodie',
-  },
-  {
-    name: 'valr.lipsk',
-    link: 'https://github.com/valr0lipsk',
-  },
-];
-
 function Footer({ className }: FooterProps) {
   const t = useTranslations('shared');
 
   return (
-    <footer className={clsx('bg-white dark:bg-gray-900', className)}>
+    <footer className={clsx('bg-white dark:bg-gray-900', className)} data-testid="footer">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-            <a
-              target="_blank"
-              href="https://rs.school/courses/reactjs"
-              className="flex items-center gap-2"
-            >
+            <a target="_blank" href={app.curseLink} className="flex items-center gap-2">
               <Image
                 width={50}
                 height={50}
@@ -60,7 +31,7 @@ function Footer({ className }: FooterProps) {
             <div>
               <h2>
                 {t('authors')}:
-                {authors.map((author) => (
+                {app.authors.map((author) => (
                   <a
                     target="_blank"
                     key={author.name}
@@ -75,7 +46,7 @@ function Footer({ className }: FooterProps) {
             <div>
               <h2>
                 {t('mentors')}:
-                {mentors.map((author) => (
+                {app.mentors.map((author) => (
                   <a
                     target="_blank"
                     key={author.name}
