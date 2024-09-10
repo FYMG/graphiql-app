@@ -6,9 +6,9 @@ import AuthProtect from '@auth/guards/AuthProtect';
 export default function Login() {
   return (
     <AuthProtect needAuth={false}>
-      <main>
+      <div className="mt-8">
         <LoginView />
-      </main>
+      </div>
     </AuthProtect>
   );
 }

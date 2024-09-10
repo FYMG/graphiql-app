@@ -4,6 +4,7 @@
     "description": "Rest GraphQL App"
   },
   "shared": {
+    "header-logo-alt": "Логотип сайта",
     "en": "🇬🇧 English",
     "ru": "🇷🇺 Русский",
     "select-language": "Выберите язык"
