@@ -49,7 +49,10 @@ function Header() {
             {t('logout')}
           </button>
         ) : (
-          <Link href={routes.login}>{t('login')}</Link>
+          <>
+            <Link href={routes.login}>{t('login')}</Link>
+            <Link href={routes.register}>{t('register')}</Link>
+          </>
         )}
       </div>
     </header>

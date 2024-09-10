@@ -4,6 +4,12 @@
     "description": "Rest GraphQL App"
   },
   "shared": {
+    "rest-client": "Rest Client",
+    "graphql-client": "Graphql Client",
+    "requests-history": "Requests History",
+    "welcome": "Welcome",
+    "welcome-back": "Welcome Back",
+    "register": "Register",
     "login": "Login",
     "logout": "Logout",
     "mentors": "Mentors",
