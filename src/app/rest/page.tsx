@@ -1,6 +1,6 @@
 import { RestView } from '@rest/views/RestView';
 
-export default function Login() {
+export default function Rest() {
   return (
     <main>
       <RestView />
