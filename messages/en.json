@@ -41,5 +41,29 @@
     "too-many-requests": "Too many requests. Please try again later.",
     "password-required": "Password is required for login",
     "user-disabled": "User disabled"
+  },
+  "rest": {
+    "send": "Send",
+    "error-placeholder": "Please enter a valid URL",
+    "placeholder": "Your request",
+    "variables": "Variables",
+    "headers": "Headers",
+    "show": "Show",
+    "hide": "Hide",
+    "variable-key": "Variable key",
+    "variable-value": "Variable value",
+    "header-key": "Header key",
+    "header-value": "Header value",
+    "remove": "Remove",
+    "body": "Body",
+    "plain-text": "Plain Text",
+    "add-variable": "Add variable",
+    "add-header": "Add header",
+    "prettify": "Prettify",
+    "response": "Response",
+    "status": "Status",
+    "loading": "Loading",
+    "loading-response": "Loading response",
+    "empty-placeholder": "Enter the URL and click Send to get a response"
   }
 }
