@@ -14,7 +14,15 @@ interface MethodSelectorProps {
   setMethod: (method: Methods) => void;
 }
 
-const methods = [Methods.Get, Methods.Post, Methods.Put, Methods.Delete];
+const methods = [
+  Methods.Get,
+  Methods.Post,
+  Methods.Put,
+  Methods.Delete,
+  Methods.Patch,
+  Methods.Head,
+  Methods.Options,
+];
 
 function MethodSelector({ method, setMethod }: MethodSelectorProps) {
   return (

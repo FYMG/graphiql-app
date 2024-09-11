@@ -1,6 +1,9 @@
 export enum Methods {
   Delete = 'Delete',
   Get = 'GET',
+  Head = 'HEAD',
+  Options = 'OPTIONS',
+  Patch = 'PATCH',
   Post = 'POST',
   Put = 'PUT',
 }
