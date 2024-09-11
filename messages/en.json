@@ -65,5 +65,11 @@
     "loading": "Loading",
     "loading-response": "Loading response",
     "empty-placeholder": "Enter the URL and click Send to get a response"
+  },
+  "graphiql": {
+    "url-input": {
+      "error-placeholder": "Please enter a valid URL",
+      "placeholder": "Your request"
+    }
   }
 }

@@ -65,5 +65,11 @@
     "loading": "Загрузка",
     "loading-response": "Загрузка ответа",
     "empty-placeholder": "Введите адрес и нажмите кнопку Отправить для получения ответа"
+  },
+  "graphiql": {
+    "url-input": {
+      "error-placeholder": "Пожалуйста, введите правильный адрес",
+      "placeholder": "Ваш запрос"
+    }
   }
 }
