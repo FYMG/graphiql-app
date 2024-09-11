@@ -1,5 +1,22 @@
 {
+  "site": {
+    "title": "Rest GraphQL App",
+    "description": "Rest GraphQL App"
+  },
   "shared": {
+    "rest-client": "Rest Client",
+    "graphql-client": "Graphql Client",
+    "requests-history": "Requests History",
+    "welcome": "Welcome",
+    "welcome-back": "Welcome Back",
+    "register": "Register",
+    "login": "Login",
+    "logout": "Logout",
+    "mentors": "Mentors",
+    "authors": "Authors",
+    "footer-logo-alt": "Course logo",
+    "course-name": "REACT COURSE 2024",
+    "header-logo-alt": "Site logo",
     "en": "🇬🇧 English",
     "ru": "🇷🇺 Русский",
     "select-language": "Select Language"

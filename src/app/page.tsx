@@ -1,7 +1,9 @@
+import { MainView } from '@shared/views/MainView';
+
 export default function Home() {
   return (
-    <main>
-      <h1>Main page</h1>
-    </main>
+    <div className="mt-4">
+      <MainView />
+    </div>
   );
 }
