@@ -16,11 +16,11 @@ export default function middleware(request: NextRequest) {
       return route.path === request.nextUrl.pathname && route.needAuth;
     });
 
-    if (isAuthRoute) {
-      if (!session) {
-        return NextResponse.redirect(new URL(routes.login, baseUrl));
-      }
-    } else if (session) {
+    if (isAuthRoute && !session) {
+      return NextResponse.redirect(new URL(routes.login, baseUrl));
+    }
+
+    if (!isAuthRoute && session) {
       return NextResponse.redirect(new URL(routes.main, baseUrl));
     }
   }
