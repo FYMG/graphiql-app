@@ -35,9 +35,7 @@ function ResponseField({ status, response, loading }: ResponseFieldProps) {
           <p>
             {t('status')}
 
-            <span className={textColorClass}>
-              &nbsp;{loading ? t('loading') : status}
-            </span>
+            <span className={textColorClass}>{loading ? t('loading') : status}</span>
           </p>
           <Editor
             className="border px-1"
