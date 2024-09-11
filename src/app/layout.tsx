@@ -10,6 +10,8 @@ import { ThemeProvider } from '@shared/components/ThemeProvider';
 import { Toaster } from '@shared/shadcn/ui/toaster';
 import { AuthProvider } from '@auth/providers/AuthProvider';
 import { ReactNode } from 'react';
+import { cookies } from 'next/headers';
+import { app } from '@shared/configs';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -23,6 +25,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const session = cookies().get(app.SESSION_COOKIE_NAME);
 
   const siteTranslations = messages.site as {
     description: string;
@@ -52,7 +55,11 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <AuthProvider>
+            <AuthProvider
+              initialData={{
+                isAuth: !!session?.value,
+              }}
+            >
               <Header />
               <main className="flex-grow">{children}</main>
               <Footer className="mt-auto" />

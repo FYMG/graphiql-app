@@ -1,11 +1,14 @@
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { useAuth } from '@auth/providers/AuthProvider';
+import { app } from '@shared/configs';
 import Header from './Header';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+  useLocale: () => app.defaultLocale,
 }));
+
 jest.mock('next/navigation', () => ({
   useRouter() {
     return {

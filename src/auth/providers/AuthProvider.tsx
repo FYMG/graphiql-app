@@ -22,14 +22,29 @@ interface AuthContextValue {
   user: User | null;
 }
 
+interface AuthProviderProps {
+  children: ReactNode;
+  initialData?: {
+    isAuth?: boolean;
+    user?: User | null;
+  };
+}
+
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   isAuth: false,
   logout: async () => {},
 });
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({
+  children,
+  initialData: { isAuth: initialIsAuth = false, user: initialUser = null } = {
+    isAuth: false,
+    user: null,
+  },
+}: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(initialUser);
+  const [isAuth, setIsAuth] = useState(initialIsAuth);
   const t = useTranslations('auth');
   const { toast } = useToast();
 
@@ -42,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(_user);
+      setIsAuth(!!_user);
     });
 
     return () => unsubscribe();
@@ -58,8 +74,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [t, toast]);
 
   const value = useMemo(() => {
-    return { user, logout, isAuth: !!user };
-  }, [user, logout]);
+    return { user, logout, isAuth };
+  }, [user, logout, isAuth]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
