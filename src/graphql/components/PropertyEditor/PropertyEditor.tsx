@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import useQueryParams from '@shared/hooks/useQueryParams';
 import { DropDownBtn } from '@rest/views/components/DropDownBtn';
 import { Input } from '@shared/shadcn/ui/input';
@@ -11,6 +11,8 @@ interface PropertyEditorProps {
 function PropertyEditor({ title }: PropertyEditorProps) {
   const [isHidden, setIsHidden] = useState(false);
   const { queryParams, addItem, removeItem, changeItemKey } = useQueryParams();
+
+  const blockId = useId();
 
   const onAddClick = () => {
     addItem('', '');
@@ -48,7 +50,7 @@ function PropertyEditor({ title }: PropertyEditorProps) {
       {!isHidden &&
         queryParams.map((item) => (
           <div
-            key={item.key}
+            key={blockId}
             className="flex justify-between gap-2 rounded-md border border-gray-300 px-1 py-1"
           >
             <Input
