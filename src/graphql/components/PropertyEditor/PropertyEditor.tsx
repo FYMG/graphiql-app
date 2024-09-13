@@ -1,16 +1,21 @@
-import React, { useId, useState } from 'react';
-import useQueryParams from '@shared/hooks/useQueryParams';
+import React, { useEffect, useId, useState } from 'react';
+import useRequestProperties, { KeyValue } from '@shared/hooks/useRequestProperties';
 import { DropDownBtn } from '@rest/views/components/DropDownBtn';
 import { Input } from '@shared/shadcn/ui/input';
 import { Button } from '@shared/shadcn/ui/button';
 
 interface PropertyEditorProps {
+  onPropertyChange: (properties: KeyValue[]) => void;
   title: string;
 }
 
-function PropertyEditor({ title }: PropertyEditorProps) {
+function PropertyEditor({ title, onPropertyChange }: PropertyEditorProps) {
   const [isHidden, setIsHidden] = useState(false);
-  const { queryParams, addItem, removeItem, changeItemKey } = useQueryParams();
+  const { properties, addItem, removeItem, changeItemKey } = useRequestProperties();
+
+  useEffect(() => {
+    onPropertyChange(properties);
+  }, [properties]);
 
   const blockId = useId();
 
@@ -19,27 +24,16 @@ function PropertyEditor({ title }: PropertyEditorProps) {
     setIsHidden(false);
   };
 
-  const onKeyChanged = (oldKey: string, newKey: string) => {
-    changeItemKey(oldKey, newKey);
-  };
-
-  const onValueChanged = (key: string, value: string) => {
-    addItem(key, value);
-  };
-
-  const onItemRemoved = (key: string) => {
-    removeItem(key);
-  };
-
-  const hideParams = () => {
-    setIsHidden(!isHidden);
-  };
+  const onKeyChanged = (oldKey: string, newKey: string) => changeItemKey(oldKey, newKey);
+  const onValueChanged = (key: string, value: string) => addItem(key, value);
+  const onItemRemoved = (key: string) => removeItem(key);
+  const hideParams = () => setIsHidden(!isHidden);
 
   return (
     <div className="mb-2 px-1">
       <div className="flex justify-between">
         <h3 className="font-semibold">{title}</h3>
-        {queryParams.length ? (
+        {properties.length ? (
           <DropDownBtn
             isHidden={isHidden}
             onClick={hideParams}
@@ -48,7 +42,7 @@ function PropertyEditor({ title }: PropertyEditorProps) {
         ) : null}
       </div>
       {!isHidden &&
-        queryParams.map((item) => (
+        properties.map((item) => (
           <div
             key={blockId}
             className="flex justify-between gap-2 rounded-md border border-gray-300 px-1 py-1"
