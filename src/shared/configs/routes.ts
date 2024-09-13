@@ -6,7 +6,7 @@ const routes = {
   register: '/registration',
   history: '/history',
   graphql: () => {
-    return `/graphql`;
+    return `/GRAPHQL`;
   },
   rest: ({ method }: { method: HTTP_METHOD }) => {
     return `/${method}`;

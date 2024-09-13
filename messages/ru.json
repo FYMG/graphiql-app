@@ -1,4 +1,11 @@
 {
+  "history": {
+    "requests-history": "История запросов",
+    "list-empty": "Вы не выполнили никаких запросов.",
+    "list-empty-try": "Список пуст. Попробуйте:",
+    "graphql": "GraphQL",
+    "rest": "Rest"
+  },
   "site": {
     "title": "Приложение Rest GraphQL",
     "description": "Приложение Rest GraphQL"

@@ -1,4 +1,11 @@
 {
+  "history": {
+    "requests-history": "Requests History",
+    "list-empty": "You haven't executed any requests.",
+    "list-empty-try": "It's empty here. Try:",
+    "graphql": "GraphQL",
+    "rest": "Rest"
+  },
   "site": {
     "title": "Rest GraphQL App",
     "description": "Rest GraphQL App"
