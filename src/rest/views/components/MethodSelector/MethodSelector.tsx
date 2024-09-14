@@ -10,8 +10,8 @@ import {
 import { Methods } from '@rest/constants';
 
 interface MethodSelectorProps {
-  method: Methods;
-  setMethod: (method: Methods) => void;
+  method: string;
+  setMethod: (method: string) => void;
 }
 
 const methods = [

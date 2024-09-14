@@ -18,8 +18,13 @@ import { BodyEditor } from '../components/BodyEditor';
 import { ResponseField } from '../components/ResponseField';
 import { VariablesEditor } from '../components/VariablesEditor';
 
-function RestView() {
-  const [method, setMethod] = useState(Methods.Get);
+interface RestViewProps {
+  method?: string;
+  slug?: string[];
+}
+
+function RestView({ method: methodParam, slug }: RestViewProps) {
+  const [method, setMethod] = useState(methodParam?.toUpperCase() || Methods.Get);
   const [headers, setHeaders] = useState<KeyAndValue[]>([]);
   const [body, setBody] = useState('');
   const [url, setUrl] = useState<string>('');
@@ -31,6 +36,12 @@ function RestView() {
   const [encodedBody, setEncodedBody] = useState('');
 
   const t = useTranslations('rest');
+
+  useEffect(() => {
+    if (slug && slug.length > 0) {
+      setUrl(slug.join('/'));
+    }
+  }, [slug]);
 
   const updateUrlWithDebounce = useMemo(() => {
     return debounce((newUrl: string) => {

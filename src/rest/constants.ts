@@ -1,12 +1,22 @@
-export enum Methods {
-  Delete = 'Delete',
-  Get = 'GET',
-  Head = 'HEAD',
-  Options = 'OPTIONS',
-  Patch = 'PATCH',
-  Post = 'POST',
-  Put = 'PUT',
+export interface MethodsTypes {
+  Delete: string;
+  Get: string;
+  Head: string;
+  Options: string;
+  Patch: string;
+  Post: string;
+  Put: string;
 }
+
+export const Methods: MethodsTypes = {
+  Delete: 'DELETE',
+  Get: 'GET',
+  Head: 'HEAD',
+  Options: 'OPTIONS',
+  Patch: 'PATCH',
+  Post: 'POST',
+  Put: 'PUT',
+};
 
 export type KeyAndValue = { index?: number; key: string; value: string };
 
