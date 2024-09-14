@@ -5,8 +5,8 @@ export type KeyValue = {
   value: string;
 };
 
-const useRequestProperties = () => {
-  const [properties, setQueryParams] = useState<KeyValue[]>([]);
+const useRequestProperties = (initialValues: KeyValue[]) => {
+  const [properties, setQueryParams] = useState<KeyValue[]>(initialValues);
 
   const addItem = (key: string, value: string) => {
     const existingItem = properties.find((item) => item.key === key);

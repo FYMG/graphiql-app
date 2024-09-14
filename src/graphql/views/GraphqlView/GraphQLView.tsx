@@ -5,38 +5,46 @@ import { Button } from '@shared/shadcn/ui/button';
 import { ResponseField } from '@rest/views/components/ResponseField';
 import debounce from 'lodash/debounce';
 import { KeyValue } from '@shared/hooks/useRequestProperties';
-import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import useFetchData from '@shared/hooks/useApiCall';
+import { Methods } from '@rest/constants';
 import { UrlInput } from '../../components/UrlInput';
 import GraphQLEditor from '../../components/GraphQLEditor/GraphQLEditor';
-import { ResponseSection } from '../../components/ResponseSection';
 import PropertyEditor from '../../components/PropertyEditor/PropertyEditor';
 
+function encodeToBase64(str: string): string {
+  return btoa(str);
+}
+
+function decodeFromBase64(str: string): string {
+  return atob(decodeURIComponent(str));
+}
+
 function GraphQLView() {
-  const [endPoint, setEndPoint] = useState<string>('');
+  const { slug } = useParams() as {
+    slug: string[];
+  };
+
+  const [endPoint, setEndPoint] = useState<string>(
+    slug && slug.length > 0 ? decodeFromBase64(slug?.[0]) : ''
+  );
   const [sdlUrl, setSdlUrl] = useState<string>('');
-  const [query, setQuery] = useState<string>(`
+  const [query, setQuery] = useState<string>(
+    slug && slug.length > 1
+      ? decodeFromBase64(slug?.[1])
+      : `
     query GetUsers {
       users {
         id
         name
       }
     }
-  `);
-  const [status, setStatus] = useState<number | null>(null);
-  const [response, setResponse] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [headers, setHeaders] = useState<KeyValue[]>([]);
+  `
+  );
+  const [headers, setHeaders] = useState<KeyValue[]>([
+    { key: 'Content-Type', value: 'application/json' },
+  ]);
   const [variables, setVariables] = useState<KeyValue[]>([]);
-
-  const router = useRouter();
-
-  function encodeToBase64(str: string): string {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
-
-  // function decodeFromBase64(str: string): string {
-  //   return decodeURIComponent(escape(atob(str)));
-  // }
 
   const debouncedNavigate = useMemo(
     () =>
@@ -48,45 +56,32 @@ function GraphQLView() {
           .map((item) => `${item.key}=${item.value}`)
           .join('&');
 
-        router.push(`/graphql/${encodedEndpoint}/${encodedBody}?${queryParamsString}`);
+        window.history.replaceState(
+          null,
+          '',
+          `/graphql/${encodedEndpoint}/${encodedBody}?${queryParamsString}`
+        );
       }, 500),
     [endPoint, headers, variables, query]
   );
 
   useEffect(() => {
     debouncedNavigate();
-  }, [endPoint, headers, variables, query]);
+  }, [endPoint, headers, variables, query, debouncedNavigate]);
+
+  const { response, status, loading, fetchData } = useFetchData();
 
   const executeQuery = async () => {
-    setLoading(true);
-
-    try {
-      const res = await fetch(endPoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Add any required headers here (e.g., Authorization)
-        },
-        body: JSON.stringify({
-          query,
-          variables: {},
-        }),
-      });
-
-      setStatus(res.status);
-
-      if (!res.ok) {
-        setResponse(res);
-
-        return;
-      }
-
-      setResponse(await res.json());
-    } catch (error) {
-      console.error(`An unknown error occurred:${error}`);
-    } finally {
-      setLoading(false);
-    }
+    await fetchData(
+      endPoint,
+      Methods.Post,
+      JSON.stringify({
+        query,
+        variables: {},
+      }),
+      headers,
+      variables
+    );
   };
 
   return (
@@ -102,13 +97,16 @@ function GraphQLView() {
       <div className="mb-4 flex h-12 flex-wrap items-center gap-2 border bg-background px-1">
         <UrlInput label="SDL URL" elementId="sdl-url" url={sdlUrl} setUrl={setSdlUrl} />
       </div>
-      <PropertyEditor title="headers" onPropertyChange={setHeaders} />
+      <PropertyEditor title="headers" onPropertyChange={setHeaders} items={headers} />
       <GraphQLEditor query={query} setQuery={setQuery} />
-      <PropertyEditor title="variables" onPropertyChange={setVariables} />
+      <PropertyEditor
+        title="variables"
+        onPropertyChange={setVariables}
+        items={variables}
+      />
       <Button onClick={executeQuery} disabled={loading}>
         {loading ? 'Running...' : 'Run Query'}
       </Button>
-      <ResponseSection response={response} />
       <ResponseField loading={loading} response={response} status={status} />
     </div>
   );

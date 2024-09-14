@@ -5,17 +5,18 @@ import { Input } from '@shared/shadcn/ui/input';
 import { Button } from '@shared/shadcn/ui/button';
 
 interface PropertyEditorProps {
+  items: KeyValue[];
   onPropertyChange: (properties: KeyValue[]) => void;
   title: string;
 }
 
-function PropertyEditor({ title, onPropertyChange }: PropertyEditorProps) {
+function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps) {
   const [isHidden, setIsHidden] = useState(false);
-  const { properties, addItem, removeItem, changeItemKey } = useRequestProperties();
+  const { properties, addItem, removeItem, changeItemKey } = useRequestProperties(items);
 
   useEffect(() => {
     onPropertyChange(properties);
-  }, [properties]);
+  }, [properties, onPropertyChange]);
 
   const blockId = useId();
 
