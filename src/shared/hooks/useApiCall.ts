@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import applyVariables from '@rest/utils/applyVariablesUtil';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { KeyValue } from '@shared/hooks/useRequestProperties';
 
 function useFetchData() {
@@ -18,29 +17,13 @@ function useFetchData() {
     setResponse({});
     try {
       setLoading(true);
-      const processedUrl = applyVariables(endPoint, variables);
-      const processedHeaders = headers.map((header) => ({
-        key: header.key,
-        value: applyVariables(header.value, variables),
-      }));
-      const processedBody = applyVariables(body, variables);
-      const config = {
+      const res = await axios.post('/api/fetchData', {
+        endPoint,
         method,
-        url: processedUrl,
-        headers: processedHeaders.reduce(
-          (acc, header) => {
-            if (header.key && header.value) {
-              acc[header.key] = header.value;
-            }
-
-            return acc;
-          },
-          {} as Record<string, string>
-        ),
-        data: processedBody,
-      };
-
-      const res: AxiosResponse = await axios(config);
+        body,
+        headers,
+        variables,
+      });
 
       setStatus(res.status);
       setResponse(res.data);
