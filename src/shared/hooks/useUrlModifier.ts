@@ -92,7 +92,11 @@ function useUrlModifier(
         setHistoryPath(
           `/${method}/${encodedEndpoint}/${encodedBody}?${queryParamsString}`
         );
-        window.history.replaceState(null, '', historyPath);
+        window.history.replaceState(
+          null,
+          '',
+          `/${method}/${encodedEndpoint}/${encodedBody}?${queryParamsString}`
+        );
       }, 500),
     [endPoint, headers, variables, body, method]
   );
