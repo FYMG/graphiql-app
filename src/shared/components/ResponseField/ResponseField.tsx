@@ -2,7 +2,7 @@ import React from 'react';
 import { Editor } from '@monaco-editor/react';
 import { useTranslations } from 'next-intl';
 
-import { EmptyResponseField } from '../EmptyResponseField';
+import { EmptyResponseField } from '@rest/views/components/EmptyResponseField';
 
 interface ResponseFieldProps {
   loading: boolean;

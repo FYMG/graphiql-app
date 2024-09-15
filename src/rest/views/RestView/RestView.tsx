@@ -1,24 +1,19 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import axios, { AxiosResponse, AxiosError } from 'axios';
-import debounce from 'lodash/debounce';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-
-import applyVariables from '@rest/utils/applyVariablesUtil';
 
 import { Button } from '@shared/shadcn/ui/button';
 import { Input } from '@shared/shadcn/ui/input';
-import { KeyAndValue, MethodsType } from '@rest/constants';
-import { generateEncodedUrl } from '@rest/utils/generateEncodedUrl';
+import { MethodsType } from '@rest/constants';
 
-import { useRequestHistory } from '@history/hooks';
-
-import { MethodSelector } from '../components/MethodSelector';
-import { HeaderEditor } from '../components/HeaderEditor';
+import PropertyEditor from '@shared/components/PropertyEditor/PropertyEditor';
+import useFetchData from '@shared/hooks/useApiCall';
+import useUrlModifier from '@shared/hooks/useUrlModifier';
+import { useSearchParams } from 'next/navigation';
+import { ResponseField } from '../../../shared/components/ResponseField';
 import { BodyEditor } from '../components/BodyEditor';
-import { ResponseField } from '../components/ResponseField';
-import { VariablesEditor } from '../components/VariablesEditor';
+import { MethodSelector } from '../components/MethodSelector';
 
 interface RestViewProps {
   method?: string;
@@ -29,101 +24,50 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
   const [method, setMethod] = useState<MethodsType>(
     (methodParam?.toUpperCase() as MethodsType) || 'GET'
   );
-  const [headers, setHeaders] = useState<KeyAndValue[]>([]);
-  const [body, setBody] = useState('');
-  const [url, setUrl] = useState<string>('');
-  const [response, setResponse] = useState<Record<string, unknown> | null>(null);
-  const [status, setStatus] = useState<number | null>(null);
-  const [urlError, setUrlError] = useState<boolean>(false);
-  const [variables, setVariables] = useState<KeyAndValue[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [encodedBody, setEncodedBody] = useState('');
-
   const t = useTranslations('rest');
+  const [urlError, setUrlError] = useState<boolean>(false);
 
-  const { addHistory } = useRequestHistory();
+  const searchParams = useSearchParams();
+  const {
+    endPoint,
+    setEndPoint,
+    body,
+    setBody,
+    headers,
+    setHeaders,
+    variables,
+    setVariables,
+  } = useUrlModifier(slug, searchParams, method);
 
-  useEffect(() => {
-    if (slug && slug.length > 0) {
-      setUrl(slug.join('/'));
-    }
-  }, [slug]);
-
-  const updateUrlWithDebounce = useMemo(() => {
-    return debounce((newUrl: string) => {
-      const fullUrl = generateEncodedUrl(method, newUrl, headers, encodedBody);
-
-      window.history.replaceState(null, '', fullUrl);
-    }, 500);
-  }, [encodedBody, headers, method]);
-
-  useEffect(() => {
-    if (url) {
-      updateUrlWithDebounce(url);
-    }
-  }, [updateUrlWithDebounce, url]);
+  const { response, status, loading, fetchData } = useFetchData();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUrl(e.target.value);
+    setEndPoint(e.target.value);
     setUrlError(false);
   };
 
   const sendRequest = async () => {
-    setResponse({});
     setUrlError(false);
 
-    if (!url.trim() && headers.length === 0) {
+    if (!endPoint.trim() && headers.length === 0) {
       setUrlError(true);
     }
 
-    const fullUrl = generateEncodedUrl(method, url, headers, encodedBody);
-
-    window.history.replaceState(null, '', fullUrl);
-    try {
-      setLoading(true);
-      const processedUrl = applyVariables(url, variables);
-      const processedHeaders = headers.map((header) => ({
-        key: header.key,
-        value: applyVariables(header.value, variables),
-      }));
-      const processedBody = applyVariables(body, variables);
-      const config = {
-        method,
-        url: processedUrl,
-        headers: processedHeaders.reduce(
-          (acc, header) => {
-            if (header.key && header.value) {
-              acc[header.key] = header.value;
-            }
-
-            return acc;
+    await fetchData(
+      endPoint,
+      method,
+      JSON.stringify({
+        body,
+        variables: variables.reduce<Record<string, string>>(
+          (obj: Record<string, string>, item) => {
+            return { ...obj, [item.key]: item.value };
           },
-          {} as Record<string, string>
+          {}
         ),
-        data: processedBody,
-      };
-
-      const res: AxiosResponse = await axios(config);
-
-      setStatus(res.status);
-      setResponse(res.data);
-
-      addHistory({
-        method,
-        baseUrl: processedUrl,
-        url: processedUrl,
-      });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        setStatus(error.response?.status || 500);
-        setResponse(error.response?.data || 'Error');
-      } else {
-        setStatus(500);
-        setResponse({ message: 'Unknown error' });
-      }
-    } finally {
-      setLoading(false);
-    }
+      }),
+      headers,
+      variables
+    );
   };
 
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -139,18 +83,32 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
         <Input
           type="text"
           placeholder={urlError ? t('error-placeholder') : t('placeholder')}
-          value={url}
+          value={endPoint}
           onChange={handleInputChange}
           onKeyDown={onKeyPress}
           className={`w-auto grow ${urlError ? 'border border-red-500' : ''}`}
         />
-        <Button variant={url.length ? 'default' : 'secondary'} onClick={sendRequest}>
+        <Button variant={endPoint.length ? 'default' : 'secondary'} onClick={sendRequest}>
           {t('send')}
         </Button>
       </div>
-      <VariablesEditor variables={variables} setVariables={setVariables} />
-      <HeaderEditor headers={headers} setHeaders={setHeaders} />
-      <BodyEditor body={body} setBody={setBody} setEncodedBody={setEncodedBody} />
+      <div className="mb-2 px-1">
+        <PropertyEditor
+          title="headers"
+          onPropertyChange={setHeaders}
+          items={headers}
+          placeholders={{ key: 'header-key', value: 'header-value' }}
+        />
+      </div>
+      <div className="mb-2 px-1">
+        <PropertyEditor
+          title="variables"
+          onPropertyChange={setVariables}
+          items={variables}
+          placeholders={{ key: 'variable-key', value: 'variable-value' }}
+        />
+      </div>
+      <BodyEditor body={body} setBody={setBody} />
       <ResponseField status={status} response={response} loading={loading} />
     </div>
   );

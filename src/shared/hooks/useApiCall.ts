@@ -15,6 +15,7 @@ function useFetchData() {
     headers: KeyValue[],
     variables: KeyValue[]
   ) {
+    setResponse({});
     try {
       setLoading(true);
       const processedUrl = applyVariables(endPoint, variables);

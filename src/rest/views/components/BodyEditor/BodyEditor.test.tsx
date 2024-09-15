@@ -39,26 +39,16 @@ jest.mock('next-intl', () => ({
 describe('BodyEditor', () => {
   it('renders without data', () => {
     const mockSetBody = jest.fn();
-    const mockSetEncodedBody = jest.fn();
 
-    render(
-      <BodyEditor body="" setBody={mockSetBody} setEncodedBody={mockSetEncodedBody} />
-    );
+    render(<BodyEditor body="" setBody={mockSetBody} />);
     expect(screen.getByText(/Body/i)).toBeInTheDocument();
   });
 
   it('displays the initial body prop in the editor', async () => {
     const mockSetBody = jest.fn();
     const bodyContent = '{"key": "value"}';
-    const mockSetEncodedBody = jest.fn();
 
-    render(
-      <BodyEditor
-        body={bodyContent}
-        setBody={mockSetBody}
-        setEncodedBody={mockSetEncodedBody}
-      />
-    );
+    render(<BodyEditor body={bodyContent} setBody={mockSetBody} />);
     const editor = await waitFor(() => screen.getByTestId('body-editor'));
 
     expect(editor).toBeInTheDocument();
@@ -66,17 +56,10 @@ describe('BodyEditor', () => {
 
   it('calls setBody with the correct value when editor content changes', async () => {
     const mockSetBody = jest.fn();
-    const mockSetEncodedBody = jest.fn();
     const initialBody = '{"key": "value"}';
     const updatedBody = '{"key": "newValue"}';
 
-    render(
-      <BodyEditor
-        body={initialBody}
-        setBody={mockSetBody}
-        setEncodedBody={mockSetEncodedBody}
-      />
-    );
+    render(<BodyEditor body={initialBody} setBody={mockSetBody} />);
 
     const editor = await waitFor(() => screen.getByTestId('body-editor'));
 
@@ -87,11 +70,8 @@ describe('BodyEditor', () => {
 
   it('renders the Prettify button', () => {
     const mockSetBody = jest.fn();
-    const mockSetEncodedBody = jest.fn();
 
-    render(
-      <BodyEditor body="" setBody={mockSetBody} setEncodedBody={mockSetEncodedBody} />
-    );
+    render(<BodyEditor body="" setBody={mockSetBody} />);
 
     const prettifyButton = screen.getByText(/Prettify/i);
 
@@ -100,15 +80,8 @@ describe('BodyEditor', () => {
 
   it('calls prettifyContent when the Prettify button is clicked', () => {
     const mockSetBody = jest.fn();
-    const mockSetEncodedBody = jest.fn();
 
-    render(
-      <BodyEditor
-        body='{"key": "value"}'
-        setBody={mockSetBody}
-        setEncodedBody={mockSetEncodedBody}
-      />
-    );
+    render(<BodyEditor body='{"key": "value"}' setBody={mockSetBody} />);
 
     const prettifyButton = screen.getByText(/Prettify/i);
 

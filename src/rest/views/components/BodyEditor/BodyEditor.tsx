@@ -15,12 +15,11 @@ import { Button } from '@shared/shadcn/ui/button';
 interface BodyEditorProps {
   body: string;
   setBody: (body: string) => void;
-  setEncodedBody: (encodedBody: string) => void;
 }
 
 type BodyFormat = 'JSON' | 'Plain Text';
 
-function BodyEditor({ body, setBody, setEncodedBody }: BodyEditorProps) {
+function BodyEditor({ body, setBody }: BodyEditorProps) {
   const [format, setFormat] = useState<BodyFormat>('JSON');
   const t = useTranslations('rest');
 
@@ -34,13 +33,6 @@ function BodyEditor({ body, setBody, setEncodedBody }: BodyEditorProps) {
     editorInstance: monacoEditor.editor.IStandaloneCodeEditor
   ) => {
     editorRef.current = editorInstance;
-
-    editorInstance.onDidBlurEditorText(() => {
-      const currentBody = editorInstance.getValue();
-      const encodedBody = currentBody ? btoa(currentBody) : '';
-
-      setEncodedBody(encodedBody);
-    });
   };
 
   const prettifyContent = () => {
