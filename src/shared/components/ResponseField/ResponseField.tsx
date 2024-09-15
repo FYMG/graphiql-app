@@ -8,9 +8,15 @@ interface ResponseFieldProps {
   loading: boolean;
   response: Record<string, unknown> | null;
   status: number | null;
+  title: string;
 }
 
-function ResponseField({ status, response, loading }: ResponseFieldProps) {
+function ResponseField({
+  status,
+  response,
+  loading,
+  title = 'response',
+}: ResponseFieldProps) {
   const t = useTranslations('rest');
   const textColorClass =
     status && status >= 200 && status < 300 ? 'text-green-500' : 'text-orange-500';
@@ -29,7 +35,7 @@ function ResponseField({ status, response, loading }: ResponseFieldProps) {
 
   return (
     <div className="mb-4 px-1">
-      <h3 className="mb-2 font-semibold">{t('response')}</h3>
+      <h3 className="mb-2 font-semibold">{t(title)}</h3>
       {status ? (
         <>
           <p>

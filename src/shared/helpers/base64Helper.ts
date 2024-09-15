@@ -1,5 +1,5 @@
 export function encodeToBase64(str: string): string {
-  return btoa(str);
+  return encodeURIComponent(btoa(str));
 }
 
 export function decodeFromBase64(str: string): string {

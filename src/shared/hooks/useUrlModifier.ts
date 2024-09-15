@@ -5,7 +5,6 @@ import defaults from '@graphql/config/defaults';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { decodeFromBase64, encodeToBase64 } from '@shared/helpers/base64Helper';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
-import useRequestHistory from '../../history/hooks/useRequestHistory';
 
 export const GRAPHQL = 'GRAPHQL';
 
@@ -43,12 +42,31 @@ function getInitialVariablesState(slug: string[] | undefined, method: string) {
   return [];
 }
 
+function getInitialSdlUrlState(
+  endPoint: string,
+  slug: string[] | undefined,
+  method: string
+) {
+  if (method === GRAPHQL) return `${endPoint}?sdl`;
+
+  if (!slug) return method === GRAPHQL ? `${endPoint}?sdl` : '';
+
+  if (slug && slug.length > 1) {
+    return JSON.parse(decodeFromBase64(slug?.[1])).sdlUrl;
+  }
+
+  return '';
+}
+
 function useUrlModifier(
   slug: string[] | undefined,
   searchParams: ReadonlyURLSearchParams,
   method: HTTP_METHOD | 'GRAPHQL'
 ) {
   const [endPoint, setEndPoint] = useState<string>(getInitialEndPointState(slug, method));
+  const [sdlUrl, setSdlUrl] = useState<string>(
+    getInitialSdlUrlState(endPoint, slug, method)
+  );
   const [body, setBody] = useState<string>(getInitialBodyState(slug, method));
   const [headers, setHeaders] = useState<KeyValue[]>(
     getInitialHeadersState(searchParams, method)
@@ -58,7 +76,6 @@ function useUrlModifier(
   );
 
   const [historyPath, setHistoryPath] = useState<string>('');
-  const { addHistory } = useRequestHistory();
 
   const debouncedNavigate = useMemo(
     () =>
@@ -76,11 +93,6 @@ function useUrlModifier(
           `/${method}/${encodedEndpoint}/${encodedBody}?${queryParamsString}`
         );
         window.history.replaceState(null, '', historyPath);
-        addHistory({
-          baseUrl: endPoint,
-          method,
-          url: historyPath,
-        });
       }, 500),
     [endPoint, headers, variables, body, method]
   );
@@ -98,6 +110,9 @@ function useUrlModifier(
     setHeaders,
     variables,
     setVariables,
+    historyPath,
+    sdlUrl,
+    setSdlUrl,
   };
 }
 

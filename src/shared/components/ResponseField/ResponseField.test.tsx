@@ -19,7 +19,9 @@ jest.mock('next-intl', () => ({
 
 describe('ResponseField', () => {
   it('renders with null response and status', () => {
-    render(<ResponseField response={null} status={null} loading={false} />);
+    render(
+      <ResponseField response={null} status={null} loading={false} title="response" />
+    );
 
     expect(screen.getByRole('heading', { name: /Response/i })).toBeInTheDocument();
     expect(screen.queryByText(/Status/i)).not.toBeInTheDocument();
@@ -28,7 +30,7 @@ describe('ResponseField', () => {
 
   it('matches snapshot when response is null, loading is false, and status is 200', () => {
     const { asFragment } = render(
-      <ResponseField loading={false} response={null} status={200} />
+      <ResponseField loading={false} response={null} status={200} title="response" />
     );
 
     expect(asFragment()).toMatchSnapshot();

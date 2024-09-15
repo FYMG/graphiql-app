@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@shared/shadcn/ui/button';
 import { ResponseField } from 'src/shared/components/ResponseField';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -9,6 +9,7 @@ import { Methods } from '@rest/constants';
 import { useTranslations } from 'next-intl';
 import PropertyEditor from '@shared/components/PropertyEditor/PropertyEditor';
 import useUrlModifier, { GRAPHQL } from '@shared/hooks/useUrlModifier';
+import { useRequestHistory } from '@history/hooks';
 import { UrlInput } from '../../components/UrlInput';
 import GraphQLEditor from '../../components/GraphQLEditor/GraphQLEditor';
 
@@ -18,6 +19,7 @@ function GraphQLView() {
     slug: string[];
   };
   const searchParams = useSearchParams();
+
   const {
     endPoint,
     setEndPoint,
@@ -27,10 +29,20 @@ function GraphQLView() {
     setHeaders,
     variables,
     setVariables,
+    historyPath,
+    sdlUrl,
+    setSdlUrl,
   } = useUrlModifier(slug, searchParams, GRAPHQL);
 
-  const [sdlUrl, setSdlUrl] = useState<string>(`${endPoint}?sdl`);
   const { response, status, loading, fetchData } = useFetchData();
+  const {
+    response: responseSdl,
+    status: statusSdl,
+    loading: loadingSDL,
+    fetchData: fetchDataSDL,
+  } = useFetchData();
+  const { addHistory } = useRequestHistory();
+
   const executeQuery = async () => {
     await fetchData(
       endPoint,
@@ -47,6 +59,18 @@ function GraphQLView() {
       headers,
       variables
     );
+
+    addHistory({
+      baseUrl: endPoint,
+      method: GRAPHQL,
+      url: historyPath,
+    });
+  };
+
+  const fetchSchema = async () => {
+    if (sdlUrl === null) return;
+
+    await fetchDataSDL(sdlUrl, Methods.GET, '', [], []);
   };
 
   return (
@@ -85,8 +109,24 @@ function GraphQLView() {
         <Button onClick={executeQuery} disabled={loading}>
           {loading ? `${t('loading')}...` : t('send')}
         </Button>
+        <Button onClick={fetchSchema} disabled={loading} className="ml-3">
+          {loadingSDL ? `${t('loading')}...` : t('fetch-schema')}
+        </Button>
       </div>
-      <ResponseField loading={loading} response={response} status={status} />
+      <ResponseField
+        loading={loading}
+        response={response}
+        status={status}
+        title="response"
+      />
+      {responseSdl && String(responseSdl).length > 0 && (
+        <ResponseField
+          loading={loadingSDL}
+          response={responseSdl}
+          status={statusSdl}
+          title="schema"
+        />
+      )}
     </div>
   );
 }

@@ -9,8 +9,9 @@ import { MethodsType } from '@rest/constants';
 
 import PropertyEditor from '@shared/components/PropertyEditor/PropertyEditor';
 import useFetchData from '@shared/hooks/useApiCall';
-import useUrlModifier from '@shared/hooks/useUrlModifier';
+import useUrlModifier, { GRAPHQL } from '@shared/hooks/useUrlModifier';
 import { useSearchParams } from 'next/navigation';
+import { useRequestHistory } from '@history/hooks';
 import { ResponseField } from '../../../shared/components/ResponseField';
 import { BodyEditor } from '../components/BodyEditor';
 import { MethodSelector } from '../components/MethodSelector';
@@ -37,9 +38,11 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
     setHeaders,
     variables,
     setVariables,
+    historyPath,
   } = useUrlModifier(slug, searchParams, method);
 
   const { response, status, loading, fetchData } = useFetchData();
+  const { addHistory } = useRequestHistory();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEndPoint(e.target.value);
@@ -68,6 +71,12 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
       headers,
       variables
     );
+
+    addHistory({
+      baseUrl: endPoint,
+      method: GRAPHQL,
+      url: historyPath,
+    });
   };
 
   const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -109,7 +118,12 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
         />
       </div>
       <BodyEditor body={body} setBody={setBody} />
-      <ResponseField status={status} response={response} loading={loading} />
+      <ResponseField
+        status={status}
+        response={response}
+        loading={loading}
+        title="response"
+      />
     </div>
   );
 }
