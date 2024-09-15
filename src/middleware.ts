@@ -8,12 +8,19 @@ export default function middleware(request: NextRequest) {
   const baseUrl = request.nextUrl.origin;
 
   const isProtectedRoute = protectedRoutes.some((route) => {
-    return route.path === request.nextUrl.pathname;
+    const paths = Array.isArray(route.path) ? route.path : [route.path];
+
+    return paths.some((path) => request.nextUrl.pathname.indexOf(path) !== -1);
   });
 
   if (isProtectedRoute) {
     const isAuthRoute = protectedRoutes.some((route) => {
-      return route.path === request.nextUrl.pathname && route.needAuth;
+      const paths = Array.isArray(route.path) ? route.path : [route.path];
+
+      return (
+        paths.some((path) => request.nextUrl.pathname.indexOf(path) !== -1) &&
+        route.needAuth
+      );
     });
 
     if (isAuthRoute && !session) {

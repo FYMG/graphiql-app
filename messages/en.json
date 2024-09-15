@@ -16,9 +16,9 @@
     "requests-history": "Requests History",
     "welcome": "Welcome",
     "welcome-back": "Welcome Back",
-    "register": "Register",
-    "login": "Login",
-    "logout": "Logout",
+    "register": "Sign up",
+    "login": "Sign In",
+    "logout": "Sign Out",
     "mentors": "Mentors",
     "authors": "Authors",
     "footer-logo-alt": "Course logo",
@@ -29,6 +29,8 @@
     "select-language": "Select Language"
   },
   "auth": {
+    "register-title": "Sign up",
+    "login-title": "Sign In",
     "logout-success": "Logged out successfully",
     "login-success": "Login successful",
     "register-success": "Registration successful",

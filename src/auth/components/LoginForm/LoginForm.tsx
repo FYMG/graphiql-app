@@ -97,6 +97,7 @@ function LoginForm() {
 
   return (
     <FormProvider {...form}>
+      <h1 className="text-2xl font-bold">{t('login-title')}</h1>
       <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
