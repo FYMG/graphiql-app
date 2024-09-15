@@ -41,8 +41,9 @@ const useRequestHistory = () => {
       },
     ];
 
-    setHistory(newHistory);
     localStorage.setItem(app.HISTORY_KEY, JSON.stringify(newHistory));
+
+    setHistory(getHistory());
   };
 
   return {
