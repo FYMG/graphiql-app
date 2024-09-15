@@ -33,9 +33,13 @@ function LoginForm() {
       .email({
         message: t('invalid-email'),
       }),
-    password: z.string({
-      message: t('required'),
-    }),
+    password: z
+      .string({
+        message: t('required'),
+      })
+      .min(1, {
+        message: t('required'),
+      }),
   });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
