@@ -1,0 +1,6 @@
+echo -e "\e[1;34m[INFO]Typescript checks:\e[0m"
+npx tsc
+echo -e "\e[1;34m[INFO]Lint:\e[0m"
+npx lint-staged
+echo -e "\e[1;34m[INFO]Test:\e[0m"
+npm run test
