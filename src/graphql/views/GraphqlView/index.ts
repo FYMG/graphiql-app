@@ -1,1 +1,1 @@
-export { default as RestView } from './GraphqlView';
+export { default as GraphQLView } from './GraphQLView';
