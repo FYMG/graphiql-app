@@ -5,7 +5,7 @@ import { Button } from '@shared/shadcn/ui/button';
 import { ResponseField } from '@rest/views/components/ResponseField';
 import debounce from 'lodash/debounce';
 import { KeyValue } from '@shared/hooks/useRequestProperties';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import useFetchData from '@shared/hooks/useApiCall';
 import { Methods } from '@rest/constants';
 import { UrlInput } from '../../components/UrlInput';
@@ -24,6 +24,7 @@ function GraphQLView() {
   const { slug } = useParams() as {
     slug: string[];
   };
+  const searchParams = useSearchParams();
 
   const [endPoint, setEndPoint] = useState<string>(
     slug && slug.length > 0 ? decodeFromBase64(slug?.[0]) : ''
@@ -33,23 +34,23 @@ function GraphQLView() {
     slug && slug.length > 1
       ? decodeFromBase64(slug?.[1])
       : `
-    query GetUsers {
+      query GetUsers {
       users {
         id
         name
       }
     }
-  `
+  `.trim()
   );
-  const [headers, setHeaders] = useState<KeyValue[]>([
-    { key: 'Content-Type', value: 'application/json' },
-  ]);
+  const [headers, setHeaders] = useState<KeyValue[]>(
+    Array.from(searchParams).map((item) => ({ key: item[0], value: item[1] }))
+  );
   const [variables, setVariables] = useState<KeyValue[]>([]);
 
   const debouncedNavigate = useMemo(
     () =>
       debounce(() => {
-        const encodedEndpoint = encodeToBase64(endPoint === '' ? 'http://' : endPoint);
+        const encodedEndpoint = encodeToBase64(endPoint === '' ? 'https://' : endPoint);
         const encodedBody = encodeToBase64(query);
         const queryParamsString = [...headers, ...variables]
           .filter((item) => item.key)
