@@ -9,6 +9,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import useFetchData from '@shared/hooks/useApiCall';
 import { Methods } from '@rest/constants';
 import { useTranslations } from 'next-intl';
+import defaults from '@graphql/config/defaults';
 import { UrlInput } from '../../components/UrlInput';
 import GraphQLEditor from '../../components/GraphQLEditor/GraphQLEditor';
 import PropertyEditor from '../../components/PropertyEditor/PropertyEditor';
@@ -29,32 +30,37 @@ function GraphQLView() {
   const searchParams = useSearchParams();
 
   const [endPoint, setEndPoint] = useState<string>(
-    slug && slug.length > 0 ? decodeFromBase64(slug?.[0]) : ''
+    slug && slug.length > 0 ? decodeFromBase64(slug?.[0]) : defaults.defaultEndPoint
   );
   const [sdlUrl, setSdlUrl] = useState<string>('');
   const [query, setQuery] = useState<string>(
-    slug && slug.length > 1
-      ? decodeFromBase64(slug?.[1])
-      : `
-      query GetUsers {
-      users {
-        id
-        name
-      }
-    }
-  `.trim()
+    slug && slug.length > 1 ? decodeFromBase64(slug?.[1]) : defaults.defaultQuery.trim()
   );
   const [headers, setHeaders] = useState<KeyValue[]>(
-    Array.from(searchParams).map((item) => ({ key: item[0], value: item[1] }))
+    searchParams.size > 0
+      ? Array.from(searchParams).map((item) => ({ key: item[0], value: item[1] }))
+      : defaults.defaultHeaders
   );
-  const [variables, setVariables] = useState<KeyValue[]>([]);
+
+  function getInitialVariablesState() {
+    if (!slug) return defaults.defaultVariables;
+
+    if (slug && slug.length > 2) return JSON.parse(decodeFromBase64(slug?.[2]));
+
+    return [];
+  }
+
+  const [variables, setVariables] = useState<KeyValue[]>(getInitialVariablesState());
 
   const debouncedNavigate = useMemo(
     () =>
       debounce(() => {
-        const encodedEndpoint = encodeToBase64(endPoint === '' ? 'https://' : endPoint);
+        const encodedEndpoint = encodeToBase64(
+          endPoint === '' ? defaults.defaultEndPoint : endPoint
+        );
         const encodedBody = encodeToBase64(query);
-        const queryParamsString = [...headers, ...variables]
+        const encodedVariables = encodeToBase64(JSON.stringify(variables));
+        const queryParamsString = headers
           .filter((item) => item.key)
           .map((item) => `${item.key}=${item.value}`)
           .join('&');
@@ -62,7 +68,7 @@ function GraphQLView() {
         window.history.replaceState(
           null,
           '',
-          `/graphql/${encodedEndpoint}/${encodedBody}?${queryParamsString}`
+          `/graphql/${encodedEndpoint}/${encodedBody}/${encodedVariables}?${queryParamsString}`
         );
       }, 500),
     [endPoint, headers, variables, query]
@@ -80,7 +86,12 @@ function GraphQLView() {
       Methods.Post,
       JSON.stringify({
         query,
-        variables: {},
+        variables: variables.reduce<Record<string, string>>(
+          (obj: Record<string, string>, item) => {
+            return { ...obj, [item.key]: item.value };
+          },
+          {}
+        ),
       }),
       headers,
       variables

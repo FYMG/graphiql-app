@@ -5,29 +5,43 @@ export type KeyValue = {
   value: string;
 };
 
+function convertToMap(items: KeyValue[]): Map<string, KeyValue> {
+  return new Map(items.map((item, index) => [String(index), item]));
+}
+
 const useRequestProperties = (initialValues: KeyValue[]) => {
-  const [properties, setQueryParams] = useState<KeyValue[]>(initialValues);
+  const [properties, setQueryParams] = useState<Map<string, KeyValue>>(
+    convertToMap(initialValues)
+  );
 
   const addItem = (key: string, value: string) => {
-    const existingItem = properties.find((item) => item.key === key);
+    const existingItem = Array.from(properties.values()).find((item) => item.key === key);
 
     if (existingItem) {
       existingItem.value = value;
     } else {
-      properties.push({ key, value });
+      properties.set(String(properties.size), { key, value });
     }
 
-    setQueryParams([...properties]);
+    setQueryParams(new Map(properties));
   };
 
   const removeItem = (key: string) => {
-    setQueryParams(properties.filter((item) => item.key !== key));
+    setQueryParams(
+      new Map(Array.from(properties.entries()).filter((item) => item[1].key !== key))
+    );
   };
 
   const changeItemKey = (oldKey: string, newKey: string) => {
-    setQueryParams(
-      properties.map((item) => (item.key === oldKey ? { ...item, key: newKey } : item))
+    const existingItem = Array.from(properties.values()).find(
+      (item) => item.key === oldKey
     );
+
+    if (existingItem) {
+      existingItem.key = newKey;
+    }
+
+    setQueryParams(new Map(properties));
   };
 
   return {
