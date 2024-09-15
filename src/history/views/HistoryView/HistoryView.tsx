@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRequestHistory } from '@history/hooks';
 import Link from 'next/link';
 import { routes } from '@shared/configs';
@@ -20,6 +20,7 @@ const methodClasses = {
 function HistoryView() {
   const { history, isLoading } = useRequestHistory();
   const t = useTranslations('history');
+  const locale = useLocale();
 
   return (
     <div className="flex flex-col gap-4 p-5">
@@ -34,12 +35,15 @@ function HistoryView() {
           <div className="flex flex-col gap-2">
             {history.map((item) => (
               <Link
-                className="flex items-center gap-0.5"
+                className="flex flex-wrap items-center gap-0.5"
                 href={item.url}
                 key={item.sendTime}
               >
+                <span className="text-sm text-gray-500">
+                  {new Date(item.sendTime).toLocaleString(locale)}
+                </span>
                 <span className={methodClasses[item.method]}>{item.method}</span>
-                <span>{item.baseUrl}</span>
+                <p className="max-w-full text-wrap break-words">{item.baseUrl}</p>
               </Link>
             ))}
           </div>

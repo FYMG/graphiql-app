@@ -83,7 +83,7 @@ function GraphQLView() {
   const executeQuery = async () => {
     await fetchData(
       endPoint,
-      Methods.Post,
+      Methods.POST,
       JSON.stringify({
         query,
         variables: variables.reduce<Record<string, string>>(

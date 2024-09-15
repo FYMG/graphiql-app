@@ -38,8 +38,11 @@ function RegistrationForm() {
         .string({
           message: t('required'),
         })
-        .min(6, {
+        .min(8, {
           message: t('password-too-short'),
+        })
+        .regex(/^(?=.*\p{L})(?=.*\p{N})(?=.*\p{P}).*$/u, {
+          message: t('password-weak'),
         }),
       repeatPassword: z.string({
         message: t('required'),
@@ -51,6 +54,7 @@ function RegistrationForm() {
     });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    mode: 'all',
     defaultValues: {
       email: '',
       password: '',

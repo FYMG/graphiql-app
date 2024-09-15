@@ -18,7 +18,7 @@ function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 50);
+      setIsSticky(window.scrollY !== 0);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -32,9 +32,9 @@ function Header() {
     <header
       data-testid="header"
       className={clsx(
-        'top-0 flex items-center justify-between p-2 transition-all duration-300',
+        'sticky top-0 flex items-center justify-between p-2 transition-all duration-300',
         {
-          'fixed top-0 w-full bg-gray-800 py-2 text-white shadow-md': isSticky,
+          'z-10 w-full bg-gray-800 py-2 text-white shadow-md': isSticky,
           'bg-white py-4 text-black dark:bg-gray-900 dark:text-white': !isSticky,
         }
       )}
