@@ -8,7 +8,7 @@ import MethodSelector from './MethodSelector';
 it('renders MethodSelector component with select element', () => {
   const mockSetMethod = jest.fn();
 
-  render(<MethodSelector method={Methods.Get} setMethod={mockSetMethod} />);
+  render(<MethodSelector method={Methods.GET} setMethod={mockSetMethod} />);
   const selectorElement = screen.getByRole('combobox');
 
   expect(selectorElement).toBeInTheDocument();
