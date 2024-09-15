@@ -13,7 +13,7 @@ function getInitialEndPointState(slug: string[] | undefined, method: string) {
     return decodeFromBase64(slug?.[0]);
   }
 
-  return method === GRAPHQL ? defaults.defaultEndPoint : '';
+  return method === GRAPHQL ? defaults.defaultEndPoint : 'https://';
 }
 
 function getInitialBodyState(slug: string[] | undefined, method: string) {
@@ -80,9 +80,7 @@ function useUrlModifier(
   const debouncedNavigate = useMemo(
     () =>
       debounce(() => {
-        const encodedEndpoint = encodeToBase64(
-          endPoint === '' ? defaults.defaultEndPoint : endPoint
-        );
+        const encodedEndpoint = encodeToBase64(endPoint === '' ? 'https://' : endPoint);
         const encodedBody = encodeToBase64(JSON.stringify({ body, variables }));
         const queryParamsString = headers
           .filter((item) => item.key)
