@@ -58,8 +58,12 @@ describe('Header', () => {
     (useAuth as jest.Mock).mockReturnValue({ logout: jest.fn(), isAuth: true });
     render(<Header />);
     fireEvent.scroll(window, { target: { scrollY: 100 } });
-    expect(screen.getByTestId('header')).toHaveClass('fixed');
+    expect(screen.getByTestId('header')).toHaveClass(
+      'z-10 w-full bg-gray-800 py-2 text-white shadow-md'
+    );
     fireEvent.scroll(window, { target: { scrollY: 0 } });
-    expect(screen.getByTestId('header')).not.toHaveClass('fixed');
+    expect(screen.getByTestId('header')).not.toHaveClass(
+      'z-10 w-full bg-gray-800 py-2 text-white shadow-md'
+    );
   });
 });
