@@ -8,6 +8,7 @@ import { KeyValue } from '@shared/hooks/useRequestProperties';
 import { useParams, useSearchParams } from 'next/navigation';
 import useFetchData from '@shared/hooks/useApiCall';
 import { Methods } from '@rest/constants';
+import { useTranslations } from 'next-intl';
 import { UrlInput } from '../../components/UrlInput';
 import GraphQLEditor from '../../components/GraphQLEditor/GraphQLEditor';
 import PropertyEditor from '../../components/PropertyEditor/PropertyEditor';
@@ -21,6 +22,7 @@ function decodeFromBase64(str: string): string {
 }
 
 function GraphQLView() {
+  const t = useTranslations('rest');
   const { slug } = useParams() as {
     slug: string[];
   };
@@ -98,16 +100,24 @@ function GraphQLView() {
       <div className="mb-4 flex h-12 flex-wrap items-center gap-2 border bg-background px-1">
         <UrlInput label="SDL URL" elementId="sdl-url" url={sdlUrl} setUrl={setSdlUrl} />
       </div>
-      <PropertyEditor title="headers" onPropertyChange={setHeaders} items={headers} />
-      <GraphQLEditor query={query} setQuery={setQuery} />
-      <PropertyEditor
-        title="variables"
-        onPropertyChange={setVariables}
-        items={variables}
-      />
-      <Button onClick={executeQuery} disabled={loading}>
-        {loading ? 'Running...' : 'Run Query'}
-      </Button>
+      <div className="mb-2 px-1">
+        <PropertyEditor title="headers" onPropertyChange={setHeaders} items={headers} />
+      </div>
+      <div className="mb-2 px-1">
+        <PropertyEditor
+          title="variables"
+          onPropertyChange={setVariables}
+          items={variables}
+        />
+      </div>
+      <div className="mb-4 px-1">
+        <GraphQLEditor query={query} setQuery={setQuery} />
+      </div>
+      <div className="mb-4 px-1">
+        <Button onClick={executeQuery} disabled={loading}>
+          {loading ? `${t('loading')}...` : t('send')}
+        </Button>
+      </div>
       <ResponseField loading={loading} response={response} status={status} />
     </div>
   );

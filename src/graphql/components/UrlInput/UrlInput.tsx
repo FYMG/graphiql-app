@@ -13,7 +13,7 @@ interface UrlInputProps {
 }
 
 function UrlInput({ elementId, url, setUrl, label }: UrlInputProps) {
-  const t = useTranslations('graphiql.url-input');
+  const t = useTranslations('rest');
   const [isError] = useState<boolean>(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

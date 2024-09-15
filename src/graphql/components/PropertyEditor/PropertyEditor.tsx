@@ -3,6 +3,7 @@ import useRequestProperties, { KeyValue } from '@shared/hooks/useRequestProperti
 import { DropDownBtn } from '@rest/views/components/DropDownBtn';
 import { Input } from '@shared/shadcn/ui/input';
 import { Button } from '@shared/shadcn/ui/button';
+import { useTranslations } from 'next-intl';
 
 interface PropertyEditorProps {
   items: KeyValue[];
@@ -11,6 +12,7 @@ interface PropertyEditorProps {
 }
 
 function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps) {
+  const t = useTranslations('rest');
   const [isHidden, setIsHidden] = useState(false);
   const { properties, addItem, removeItem, changeItemKey } = useRequestProperties(items);
 
@@ -31,14 +33,16 @@ function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps)
   const hideParams = () => setIsHidden(!isHidden);
 
   return (
-    <div className="mb-2 px-1">
+    <>
       <div className="flex justify-between">
-        <h3 className="font-semibold">{title}</h3>
+        <h3 className="font-semibold">
+          {t(title).charAt(0).toUpperCase() + t(title).slice(1)}
+        </h3>
         {properties.length ? (
           <DropDownBtn
             isHidden={isHidden}
             onClick={hideParams}
-            text={title.toLowerCase()}
+            text={t(title).toLowerCase()}
           />
         ) : null}
       </div>
@@ -61,7 +65,7 @@ function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps)
               onChange={(e) => onValueChanged(item.key, e.target.value)}
             />
             <Button variant="default" onClick={() => onItemRemoved(item.key)}>
-              Remove
+              {t('remove')}
             </Button>
           </div>
         ))}
@@ -71,9 +75,9 @@ function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps)
         onClick={onAddClick}
         className="m-0 h-auto p-0 text-sm text-blue-400 transition delay-150 hover:text-blue-700 hover:no-underline"
       >
-        Add {title}
+        {t('add')}
       </Button>
-    </div>
+    </>
   );
 }
 
