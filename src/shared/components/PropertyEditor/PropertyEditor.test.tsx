@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-
-import HeaderEditor from './HeaderEditor';
+import PropertyEditor from '@shared/components/PropertyEditor/PropertyEditor';
 
 const headerValue = 'Header value';
 const headerKey = 'Header key';
@@ -13,7 +12,7 @@ jest.mock('next-intl', () => ({
       headers: 'Headers',
       'header-key': headerKey,
       'header-value': headerValue,
-      'add-header': 'Add header',
+      add: 'Add header',
       remove: 'Remove',
     };
 
@@ -21,12 +20,21 @@ jest.mock('next-intl', () => ({
   },
 }));
 
+const placeholders = { key: 'header-key', value: 'header-value' };
+
 describe('HeaderEditor', () => {
   it('renders the component with headers', () => {
     const headers = [{ key: 'key1', value: 'value1' }];
     const setHeaders = jest.fn();
 
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+    render(
+      <PropertyEditor
+        items={headers}
+        onPropertyChange={setHeaders}
+        title="headers"
+        placeholders={placeholders}
+      />
+    );
 
     expect(screen.getByText('Headers')).toBeInTheDocument();
 
@@ -35,17 +43,24 @@ describe('HeaderEditor', () => {
   });
 
   it('adds a new empty variable on button click', () => {
-    const headers = [{ key: '', value: '' }];
+    const headers = [{ key: 'a', value: 'b' }];
     const setHeaders = jest.fn();
 
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+    render(
+      <PropertyEditor
+        items={headers}
+        onPropertyChange={setHeaders}
+        title="headers"
+        placeholders={placeholders}
+      />
+    );
 
     const addButton = screen.getByText('Add header');
 
     fireEvent.click(addButton);
 
     expect(setHeaders).toHaveBeenCalledWith([
-      { key: '', value: '' },
+      { key: 'a', value: 'b' },
       { key: '', value: '' },
     ]);
   });
@@ -54,7 +69,14 @@ describe('HeaderEditor', () => {
     const headers = [{ key: 'key1', value: 'value1' }];
     const setHeaders = jest.fn();
 
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+    render(
+      <PropertyEditor
+        items={headers}
+        onPropertyChange={setHeaders}
+        title="headers"
+        placeholders={placeholders}
+      />
+    );
 
     const removeButton = screen.getByText('Remove');
 
@@ -67,7 +89,14 @@ describe('HeaderEditor', () => {
     const headers = [{ key: 'key1', value: 'value1' }];
     const setHeaders = jest.fn();
 
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+    render(
+      <PropertyEditor
+        items={headers}
+        onPropertyChange={setHeaders}
+        title="headers"
+        placeholders={placeholders}
+      />
+    );
 
     const valueInput = screen.getByPlaceholderText(headerValue);
 
@@ -80,7 +109,14 @@ describe('HeaderEditor', () => {
     const headers = [{ key: 'key1', value: 'value1' }];
     const setHeaders = jest.fn();
 
-    render(<HeaderEditor headers={headers} setHeaders={setHeaders} />);
+    render(
+      <PropertyEditor
+        items={headers}
+        onPropertyChange={setHeaders}
+        title="headers"
+        placeholders={placeholders}
+      />
+    );
 
     const keyInput = screen.getByPlaceholderText(headerKey);
 

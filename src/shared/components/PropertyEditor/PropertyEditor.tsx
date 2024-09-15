@@ -8,13 +8,20 @@ import { useTranslations } from 'next-intl';
 interface PropertyEditorProps {
   items: KeyValue[];
   onPropertyChange: (properties: KeyValue[]) => void;
+  placeholders: KeyValue;
   title: string;
 }
 
-function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps) {
+function PropertyEditor({
+  title,
+  onPropertyChange,
+  items,
+  placeholders,
+}: PropertyEditorProps) {
   const t = useTranslations('rest');
   const [isHidden, setIsHidden] = useState(false);
-  const { properties, addItem, removeItem, changeItemKey } = useRequestProperties(items);
+  const { properties, addItem, removeItem, changeItemKey, changeItemValue } =
+    useRequestProperties(items);
 
   useEffect(() => {
     onPropertyChange(Array.from(properties.values()));
@@ -25,9 +32,9 @@ function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps)
     setIsHidden(false);
   };
 
-  const onKeyChanged = (oldKey: string, newKey: string) => changeItemKey(oldKey, newKey);
-  const onValueChanged = (key: string, value: string) => addItem(key, value);
-  const onItemRemoved = (key: string) => removeItem(key);
+  const onKeyChanged = (index: string, value: string) => changeItemKey(index, value);
+  const onValueChanged = (index: string, value: string) => changeItemValue(index, value);
+  const onItemRemoved = (index: string) => removeItem(index);
   const hideParams = () => setIsHidden(!isHidden);
 
   return (
@@ -52,17 +59,17 @@ function PropertyEditor({ title, onPropertyChange, items }: PropertyEditorProps)
           >
             <Input
               type="text"
-              placeholder="key"
+              placeholder={t(placeholders.key)}
               value={item[1].key}
-              onChange={(e) => onKeyChanged(item[1].key, e.target.value)}
+              onChange={(e) => onKeyChanged(item[0], e.target.value)}
             />
             <Input
               type="text"
-              placeholder="value"
+              placeholder={t(placeholders.value)}
               value={item[1].value}
-              onChange={(e) => onValueChanged(item[1].key, e.target.value)}
+              onChange={(e) => onValueChanged(item[0], e.target.value)}
             />
-            <Button variant="default" onClick={() => onItemRemoved(item[1].key)}>
+            <Button variant="default" onClick={() => onItemRemoved(item[0])}>
               {t('remove')}
             </Button>
           </div>
