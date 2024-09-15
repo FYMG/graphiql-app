@@ -1,4 +1,3 @@
-// app/api/fetchData/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import applyVariables from '@rest/utils/applyVariablesUtil';
 import axios, { AxiosError, AxiosResponse } from 'axios';
