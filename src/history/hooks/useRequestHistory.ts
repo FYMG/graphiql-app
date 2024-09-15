@@ -34,11 +34,11 @@ const useRequestHistory = () => {
 
   const addHistory = (item: Omit<HistoryItem, 'sendTime'>) => {
     const newHistory = [
-      ...history,
       {
         ...item,
         sendTime: Date.now(),
       },
+      ...history,
     ];
 
     localStorage.setItem(app.HISTORY_KEY, JSON.stringify(newHistory));
