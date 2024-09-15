@@ -4,8 +4,10 @@ import debounce from 'lodash/debounce';
 import defaults from '@graphql/config/defaults';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import { decodeFromBase64, encodeToBase64 } from '@shared/helpers/base64Helper';
+import { HTTP_METHOD } from 'next/dist/server/web/http';
+import useRequestHistory from '../../history/hooks/useRequestHistory';
 
-export const GRAPHQL = 'graphql';
+export const GRAPHQL = 'GRAPHQL';
 
 function getInitialEndPointState(slug: string[] | undefined, method: string) {
   if (slug && slug.length > 0) {
@@ -44,7 +46,7 @@ function getInitialVariablesState(slug: string[] | undefined, method: string) {
 function useUrlModifier(
   slug: string[] | undefined,
   searchParams: ReadonlyURLSearchParams,
-  method: string
+  method: HTTP_METHOD | 'GRAPHQL'
 ) {
   const [endPoint, setEndPoint] = useState<string>(getInitialEndPointState(slug, method));
   const [body, setBody] = useState<string>(getInitialBodyState(slug, method));
@@ -54,6 +56,9 @@ function useUrlModifier(
   const [variables, setVariables] = useState<KeyValue[]>(
     getInitialVariablesState(slug, method)
   );
+
+  const [historyPath, setHistoryPath] = useState<string>('');
+  const { addHistory } = useRequestHistory();
 
   const debouncedNavigate = useMemo(
     () =>
@@ -67,11 +72,15 @@ function useUrlModifier(
           .map((item) => `${item.key}=${item.value}`)
           .join('&');
 
-        window.history.replaceState(
-          null,
-          '',
+        setHistoryPath(
           `/${method}/${encodedEndpoint}/${encodedBody}?${queryParamsString}`
         );
+        window.history.replaceState(null, '', historyPath);
+        addHistory({
+          baseUrl: endPoint,
+          method,
+          url: historyPath,
+        });
       }, 500),
     [endPoint, headers, variables, body, method]
   );
