@@ -72,7 +72,7 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
     setResponse({});
     setUrlError(false);
 
-    if (!url.trim()) {
+    if (!url.trim() && headers.length === 0) {
       setUrlError(true);
     }
 
@@ -110,7 +110,7 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
 
       addHistory({
         method,
-        baseUrl: fullUrl,
+        baseUrl: processedUrl,
         url: processedUrl,
       });
     } catch (error) {
