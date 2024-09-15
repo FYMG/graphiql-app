@@ -9,8 +9,10 @@ import applyVariables from '@rest/utils/applyVariablesUtil';
 
 import { Button } from '@shared/shadcn/ui/button';
 import { Input } from '@shared/shadcn/ui/input';
-import { KeyAndValue, Methods } from '@rest/constants';
+import { KeyAndValue, MethodsType } from '@rest/constants';
 import { generateEncodedUrl } from '@rest/utils/generateEncodedUrl';
+
+import { useRequestHistory } from '@history/hooks';
 
 import { MethodSelector } from '../components/MethodSelector';
 import { HeaderEditor } from '../components/HeaderEditor';
@@ -24,7 +26,9 @@ interface RestViewProps {
 }
 
 function RestView({ method: methodParam, slug }: RestViewProps) {
-  const [method, setMethod] = useState(methodParam?.toUpperCase() || Methods.Get);
+  const [method, setMethod] = useState<MethodsType>(
+    (methodParam?.toUpperCase() as MethodsType) || 'GET'
+  );
   const [headers, setHeaders] = useState<KeyAndValue[]>([]);
   const [body, setBody] = useState('');
   const [url, setUrl] = useState<string>('');
@@ -36,6 +40,8 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
   const [encodedBody, setEncodedBody] = useState('');
 
   const t = useTranslations('rest');
+
+  const { addHistory } = useRequestHistory();
 
   useEffect(() => {
     if (slug && slug.length > 0) {
@@ -101,6 +107,12 @@ function RestView({ method: methodParam, slug }: RestViewProps) {
 
       setStatus(res.status);
       setResponse(res.data);
+
+      addHistory({
+        method,
+        baseUrl: fullUrl,
+        url: processedUrl,
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
         setStatus(error.response?.status || 500);

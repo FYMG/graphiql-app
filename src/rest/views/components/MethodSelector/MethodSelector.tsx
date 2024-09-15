@@ -7,21 +7,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@shared/shadcn/ui/select';
-import { Methods } from '@rest/constants';
+import { Methods, MethodsType } from '@rest/constants';
 
 interface MethodSelectorProps {
   method: string;
-  setMethod: (method: string) => void;
+  setMethod: (method: MethodsType) => void;
 }
 
 const methods = [
-  Methods.Get,
-  Methods.Post,
-  Methods.Put,
-  Methods.Delete,
-  Methods.Patch,
-  Methods.Head,
-  Methods.Options,
+  Methods.GET,
+  Methods.POST,
+  Methods.PUT,
+  Methods.DELETE,
+  Methods.PATCH,
+  Methods.HEAD,
+  Methods.OPTIONS,
 ];
 
 function MethodSelector({ method, setMethod }: MethodSelectorProps) {
