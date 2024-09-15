@@ -11,10 +11,9 @@ describe('useRequestHistory', () => {
   it('should add a new history item', () => {
     const { result } = renderHook(() => useRequestHistory());
 
-    const newItem: HistoryItem = {
+    const newItem: Omit<HistoryItem, 'sendTime'> = {
       baseUrl: 'http://localhost',
       method: 'GET',
-      sendTime: Date.now(),
       url: 'http://localhost',
     };
 
